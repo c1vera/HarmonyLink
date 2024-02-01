@@ -1,0 +1,11 @@
+.SideBar {
+  flex: 1; 
+  background-color: #a986ff;
+  color:white;
+}
+
+.SideBar a, .SideBar a:visited {
+  text-decoration: none;
+  color: inherit;
+  margin: 10px;
+}
