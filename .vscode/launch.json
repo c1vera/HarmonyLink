@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-HarmonyLinkApplication<HarmonyLink>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.dongyang.HarmonyLink.HarmonyLinkApplication",
+      "projectName": "HarmonyLink",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
