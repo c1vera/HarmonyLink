@@ -37,14 +37,15 @@ public class RegisterController {
 
     }
 
-    @PostMapping("/user/requestRegister")
-    public void register(UserDTO dto) {
-        log.info(dto.toString());
 
-        // 서비스 호출
-        UserDTO resultDTO = registerService.register(dto);
-
-        // return resultDTO != null ? "회원가입 결과 사이트" : "redirect:/page/register"; // 회원 가입 실패에 의한 리다이렉트 또는,
-    }
+//    @PostMapping("/user/requestRegister")
+//    public void register(UserDTO dto) {
+//        log.info(dto.toString());
+//
+//        // 서비스 호출
+//        UserDTO resultDTO = registerService.register(dto);
+//
+//        // return resultDTO != null ? "회원가입 결과 사이트" : "redirect:/page/register"; // 회원 가입 실패에 의한 리다이렉트 또는,
+//    }
 
 }
