@@ -26,6 +26,13 @@ public class RegisterService {
 
     @Transactional
     public UserDTO register(UserDTO dto) {
+        UserEntity userEntity = UserEntity.toEntity(dto);
+
+        // 해당 사용자가 이미 등록된 경우
+        if(userRepository.checkAlreadyRegister(dto.getId(), dto.getEmail()).orElse(null) != null) {
+            throw new RuntimeException("회원가입이 이미 완료된 회원입니다."); // 등록을 수행하지 않음
+        }
+
         // DTO to Entity + save
         UserEntity result = userRepository.save(UserEntity.toEntity(dto));
 

@@ -23,6 +23,8 @@ public class SessionManager {
      * 본 Map에 UUID - id로 저장된 값과 쿠키에서 올라온 id - UUID 쿠키내역을 비교하여 두 id 같은지 비교. */
     Map<String, String> sessionStore = new HashMap<>();
 
+    public static final String cookieName = COOKIE_NAME;
+
     /** 쿠키와 세션 생성 */
     public Cookie sessionLogin(HttpServletRequest request, UserDTO user) {
 
@@ -47,4 +49,7 @@ public class SessionManager {
     }
 
 
+    public String sessionCheck(String sessionName) {
+        return sessionStore.getOrDefault(sessionName, "None");
+    }
 }

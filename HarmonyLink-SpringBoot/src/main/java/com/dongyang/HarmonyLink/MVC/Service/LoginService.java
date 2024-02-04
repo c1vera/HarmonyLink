@@ -43,6 +43,10 @@ public class LoginService {
         return sessionManager.sessionLogin(request, user);
     }
 
+    public String sessionCheck(String sessionName) {
+        return sessionManager.sessionCheck(sessionName);
+    }
+
     public void sessionLogout(HttpServletRequest request) {
         sessionManager.sessionLogout(request);
     }

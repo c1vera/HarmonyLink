@@ -49,6 +49,8 @@ public class RegisterApiController {
 
         // 서비스 호출
         UserDTO resultDTO = registerService.register(dto);
+
+        // 회원가입완료 시 어디로 가느냐에 따라, resultDTO 사용 안할수 있음.
     }
 
 
