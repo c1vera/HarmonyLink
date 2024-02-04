@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import "./SideBar.css";
+import UserView from "./UserView";
 
 const Body = styled.div`
   height: 100%;
@@ -28,15 +29,6 @@ const Content = styled.div`
   align-items: center;
 `;
 
-const Login = styled.div`
-  flex: 1;
-  font-size: 25px;
-  margin: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
 function SideBar() {
   return (
     <div className="SideBar">
@@ -46,12 +38,8 @@ function SideBar() {
             <h3>HarmonyLink</h3>
           </Link>
         </Logo>
-
         <Content>본문</Content>
-        <Login>
-          <Link to="/login">로그인</Link>
-          <Link to="/register">회원가입</Link>
-        </Login>
+        <UserView/>
       </Body>
     </div>
   );

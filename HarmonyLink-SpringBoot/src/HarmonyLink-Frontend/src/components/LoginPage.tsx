@@ -3,6 +3,8 @@ import "./LoginPage.css";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { loginUser } from "../features/auth/authSlice";
 
 const Body = styled.div`
   height: 100%;
@@ -30,12 +32,14 @@ const LoginPage: React.FC = () => {
   const [pw, setPw] = useState<string>("");
   const [loginMessage, setLoginMessage] = useState<string>("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   /** 로그인 POST 요청 */
   const handleLogin = () => {
     axios
       .post("http://localhost:8080/api/v1/user/requestLogin", { id, pw })
       .then((result) => {
+        dispatch(loginUser(result.data.user));
         // 로그인 성공 처리
         console.log(result.data);
         navigate("/"); // 홈으로 리다이렉트
