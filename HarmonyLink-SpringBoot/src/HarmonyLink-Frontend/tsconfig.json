@@ -20,6 +20,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
+  "include": ["src", "Pages/SideBar", "Pages/Write", "Pages/MainPage.tsx", "Pages/UserView.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

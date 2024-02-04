@@ -1,13 +1,12 @@
 import "./App.css";
-import SideBar from "./components/SideBar";
-import MainPage from "./components/MainPage";
-import LoginPage from "./components/LoginPage";
-import RegisterPage from "./components/RegisterPage";
+import SideBar from "./Pages/SideBar/SideBar";
+import MainPage from "./Pages/MainPage";
+import LoginPage from "./Pages/Login/LoginPage";
+import RegisterPage from "./Pages/Register/RegisterPage";
+import WritePage from "./Pages/Write/WritePage";
 import { Route, Routes } from "react-router-dom";
-import { useState } from "react";
-const App: React.FC = () => {
-  const [loginstate, setLoginstate] = useState<boolean>(false);
 
+const App: React.FC = () => {
   return (
     <div className="App">
         <SideBar />
@@ -15,6 +14,7 @@ const App: React.FC = () => {
           <Route path="/" element={<MainPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/write" element={<WritePage />} />
         </Routes>
     </div>
   );

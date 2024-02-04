@@ -4,7 +4,8 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { loginUser } from "../features/auth/authSlice";
+import { loginUser } from "../../features/auth/authSlice";
+import Input from '../../components/Input/Input';
 
 const Body = styled.div`
   height: 100%;
@@ -12,14 +13,6 @@ const Body = styled.div`
   flex-direction: column;
   align-items: center;
   text-align: center;
-`;
-
-const Input = styled.input`
-  font-size: 20px;
-  padding: 20px;
-  width: 800px;
-  border-radius: 10px;
-  border: 3px solid #a986ff;
 `;
 
 const LoginMessage = styled.p`

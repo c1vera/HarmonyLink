@@ -3,23 +3,18 @@ import "./RegisterPage.css";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Input from '../../components/Input/Input';
+
 
 const Body = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 10px;
   text-align: center;
 `;
 
-const Input = styled.input`
-  font-size: 20px;
-  padding: 20px;
-  width: 800px;
-  border-radius: 10px;
-  border: 3px solid #a986ff;
-`;
+
 
 const RegisterPage: React.FC = () => {
   const [id, setId] = useState<string>("");
@@ -28,6 +23,7 @@ const RegisterPage: React.FC = () => {
   const [name, setName] = useState<string>("");
   const [nickname, setNickname] = useState<string>("");
   const [mbti, setMbti] = useState<string>("");
+  const [registerMassege, setRegisterMassege] = useState<string>("");
   const navigate = useNavigate();
 
   /** 회원가입 POST 요청 */
@@ -47,7 +43,8 @@ const RegisterPage: React.FC = () => {
       })
       .catch((error) => {
         console.log("회원가입 데이터 전송오류: ", error);
-        navigate("/"); // 실패 시 지정된 경로로 리다이렉트(실패페이지 구현 안해서 메인으로)
+        setRegisterMassege("회원가입에 문제가 발생했어요.");
+        
       });
   };
 
@@ -99,6 +96,7 @@ const RegisterPage: React.FC = () => {
           }}
         ></Input>
         <button onClick={handleRegister}>회원가입하기</button>
+        <p>{registerMassege}</p>
       </Body>
     </div>
   );

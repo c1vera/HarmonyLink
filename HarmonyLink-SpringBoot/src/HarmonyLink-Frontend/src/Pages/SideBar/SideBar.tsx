@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import "./SideBar.css";
-import UserView from "./UserView";
+import UserView from "../UserView";
 
 const Body = styled.div`
   height: 100%;
@@ -9,7 +9,6 @@ const Body = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 10px;
   text-align: center;
 `;
 

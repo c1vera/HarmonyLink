@@ -9,12 +9,15 @@ const Login = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 20px 0px;
 `;
 
 function UserView() {
   return (
     <div className="UserView">
-      <Login>
+      <Link to="/write">글쓰기</Link>
+      <Login>      
+      
         <Link to="/login">로그인</Link>
         <Link to="/register">회원가입</Link>
       </Login>
