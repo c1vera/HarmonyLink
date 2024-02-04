@@ -1,15 +1,12 @@
-package com.dongyang.HarmonyLink.Entity;
+package com.dongyang.HarmonyLink.MVC.domain.Entity;
 
-import com.dongyang.HarmonyLink.DTO.UserDTO;
-import com.dongyang.HarmonyLink.Entity.superEntitys.BaseTimeEntity;
+import com.dongyang.HarmonyLink.MVC.domain.DTO.UserDTO;
+import com.dongyang.HarmonyLink.MVC.domain.Entity.superEntitys.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
-import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @AllArgsConstructor

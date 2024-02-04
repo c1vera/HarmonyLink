@@ -1,7 +1,6 @@
-package com.dongyang.HarmonyLink.Conroller;
+package com.dongyang.HarmonyLink.MVC.Conroller;
 
-import com.dongyang.HarmonyLink.DTO.UserDTO;
-import com.dongyang.HarmonyLink.Service.RegisterService;
+import com.dongyang.HarmonyLink.MVC.Service.RegisterService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +16,8 @@ public class RegisterController {
     }
 
     /* =====================
-    * 구현 대상 :
-    * 사이트 이동, 비 Rest API
-    ======================*/
+    * 사용 용도 : view 구현 안된 상태에서 test 용 view를 사용하기 위한 용도.
+    *======================*/
 
 
     /* 회원가입 사이트 이동 관련 */

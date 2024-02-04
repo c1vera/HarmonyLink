@@ -1,4 +1,4 @@
-package com.dongyang.HarmonyLink.Conroller;
+package com.dongyang.HarmonyLink.MVC.Conroller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;

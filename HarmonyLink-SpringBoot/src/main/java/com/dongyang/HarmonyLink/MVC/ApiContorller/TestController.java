@@ -1,4 +1,4 @@
-package com.dongyang.HarmonyLink.ApiContorller;
+package com.dongyang.HarmonyLink.MVC.ApiContorller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

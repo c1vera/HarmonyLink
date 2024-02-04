@@ -1,4 +1,4 @@
-package com.dongyang.HarmonyLink.Entity.superEntitys;
+package com.dongyang.HarmonyLink.MVC.domain.Entity.superEntitys;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
+/** DB에 대한 데이터의 생성 시간 및 수정시간을 자동으로 기록해주는 Entity. */
 @Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)

@@ -1,11 +1,7 @@
-package com.dongyang.HarmonyLink.DTO;
+package com.dongyang.HarmonyLink.MVC.domain.DTO;
 
-import com.dongyang.HarmonyLink.Entity.UserEntity;
+import com.dongyang.HarmonyLink.MVC.domain.Entity.UserEntity;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.time.LocalDateTime;
-import java.util.Date;
 
 @AllArgsConstructor
 @Getter
