@@ -22,6 +22,9 @@ public class UserDTO {
 
     private String mbti;
 
+    public UserDTO() {
+    }
+    
 //    @DateTimeFormat(pattern = "yyyy-MM-dd")
 //    private LocalDateTime date; // BaseTimeEntity 추가에 따른 변경방안 생각해보기.
 

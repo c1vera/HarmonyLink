@@ -14,5 +14,8 @@ public class LoginDTO {
     private String id;
 
     private String pw;
+    public LoginDTO() {
+
+    }
 
 }
