@@ -1,7 +1,6 @@
 package com.dongyang.HarmonyLink.MVC.Repository;
 
-import com.dongyang.HarmonyLink.MVC.domain.DTO.LoginDTO;
-import com.dongyang.HarmonyLink.MVC.domain.Entity.UserEntity;
+import com.dongyang.HarmonyLink.MVC.domain.User.Entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -1,4 +1,4 @@
-package com.dongyang.HarmonyLink.MVC.domain.Entity.superEntitys;
+package com.dongyang.HarmonyLink.MVC.domain._Super.Entity;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

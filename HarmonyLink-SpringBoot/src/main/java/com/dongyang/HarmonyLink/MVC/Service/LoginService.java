@@ -1,12 +1,11 @@
 package com.dongyang.HarmonyLink.MVC.Service;
 
 import com.dongyang.HarmonyLink.MVC.Repository.UserRepository;
-import com.dongyang.HarmonyLink.MVC.domain.DTO.LoginDTO;
-import com.dongyang.HarmonyLink.MVC.domain.DTO.UserDTO;
-import com.dongyang.HarmonyLink.MVC.domain.Entity.UserEntity;
+import com.dongyang.HarmonyLink.MVC.domain.User.DTO.LoginDTO;
+import com.dongyang.HarmonyLink.MVC.domain.User.DTO.UserDTO;
+import com.dongyang.HarmonyLink.MVC.domain.User.Entity.UserEntity;
 import com.dongyang.HarmonyLink.Manager.SessionManager;
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -37,18 +36,18 @@ public class LoginService {
 
     /** 로그인 권한 확인 위한 session 생성 작업
      * 참고 : 권한 확인 방법 == session attribute 값의 유무 확인 */
-    public Cookie sessionLogin(UserDTO user, HttpServletRequest request) {
+    public Cookie sessionLogin(HttpSession session, UserDTO user) {
 
         // 상수UUID - UUID 쌍의 쿠키를 만들고, session에는 UUID - 사용자id와 같은 키값쌍을 저장해둠
-        return sessionManager.sessionLogin(request, user);
+        return sessionManager.sessionLogin(session, user);
     }
 
-    public String sessionCheck(String sessionName) {
-        return sessionManager.sessionCheck(sessionName);
+    public boolean sessionCheck(HttpSession session, String sessionName) {
+        return sessionManager.sessionCheck(session, sessionName);
     }
 
-    public void sessionLogout(HttpServletRequest request) {
-        sessionManager.sessionLogout(request);
+    public void sessionLogout(HttpSession session) {
+        sessionManager.sessionLogout(session);
     }
 
 }

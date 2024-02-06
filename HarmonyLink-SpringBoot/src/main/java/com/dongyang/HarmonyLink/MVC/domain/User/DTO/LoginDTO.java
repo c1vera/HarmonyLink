@@ -1,4 +1,4 @@
-package com.dongyang.HarmonyLink.MVC.domain.DTO;
+package com.dongyang.HarmonyLink.MVC.domain.User.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

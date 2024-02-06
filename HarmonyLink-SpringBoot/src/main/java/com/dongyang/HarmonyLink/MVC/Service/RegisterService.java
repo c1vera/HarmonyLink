@@ -1,7 +1,7 @@
 package com.dongyang.HarmonyLink.MVC.Service;
 
-import com.dongyang.HarmonyLink.MVC.domain.DTO.UserDTO;
-import com.dongyang.HarmonyLink.MVC.domain.Entity.UserEntity;
+import com.dongyang.HarmonyLink.MVC.domain.User.DTO.UserDTO;
+import com.dongyang.HarmonyLink.MVC.domain.User.Entity.UserEntity;
 import com.dongyang.HarmonyLink.MVC.Repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -44,6 +44,23 @@ public class RegisterService {
 
         registerRepository.findByNickname(dto.getNickname());
         */
+    }
+
+    @Transactional
+    public UserDTO patchUser(UserDTO dto) {
+        UserEntity userEntity = UserEntity.toEntity(dto);
+
+        // 예외처리 부문
+
+
+        UserEntity result = userRepository.save(UserEntity.toEntity(dto));
+
+        return UserDTO.toDTO(result);
+    }
+
+    @Transactional
+    public void deleteUser(UserDTO dto) {
+        userRepository.delete(UserEntity.toEntity(dto));
     }
 
 //    public UserDTO patch(UserDTO dto) {

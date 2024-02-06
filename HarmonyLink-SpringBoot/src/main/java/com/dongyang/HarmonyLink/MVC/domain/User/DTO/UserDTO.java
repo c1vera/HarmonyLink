@@ -1,6 +1,6 @@
-package com.dongyang.HarmonyLink.MVC.domain.DTO;
+package com.dongyang.HarmonyLink.MVC.domain.User.DTO;
 
-import com.dongyang.HarmonyLink.MVC.domain.Entity.UserEntity;
+import com.dongyang.HarmonyLink.MVC.domain.User.Entity.UserEntity;
 import lombok.*;
 
 @AllArgsConstructor
@@ -22,8 +22,8 @@ public class UserDTO {
 
     private String mbti;
 
-    public UserDTO() {
-    }
+//    public UserDTO() {
+//    }
     
 //    @DateTimeFormat(pattern = "yyyy-MM-dd")
 //    private LocalDateTime date; // BaseTimeEntity 추가에 따른 변경방안 생각해보기.

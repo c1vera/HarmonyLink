@@ -1,11 +1,11 @@
 package com.dongyang.HarmonyLink.MVC.ApiContorller;
 
 import com.dongyang.HarmonyLink.MVC.Service.LoginService;
-import com.dongyang.HarmonyLink.MVC.domain.DTO.LoginDTO;
-import com.dongyang.HarmonyLink.MVC.domain.DTO.UserDTO;
-import com.dongyang.HarmonyLink.Manager.SessionManager;
+import com.dongyang.HarmonyLink.MVC.domain.User.DTO.LoginDTO;
+import com.dongyang.HarmonyLink.MVC.domain.User.DTO.UserDTO;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -13,8 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static com.dongyang.HarmonyLink.Manager.SessionConst.COOKIE_NAME;
-
-import java.util.Optional;
 
 @RequestMapping("/api/v1")
 @RestController
@@ -45,27 +43,35 @@ public class LoginApiController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 401 에러 코드
         }
 
+        // HttpSession은 Controller 단에서 작성하기.
+        HttpSession session = request.getSession();
+
         // 로그인에 성공한 경우, 해당 사용자의 세션을 생성
-        Cookie cookie = loginService.sessionLogin(resultDTO, request);
-        log.info("로그인 성공" + String.valueOf(cookie));
+        Cookie cookie = loginService.sessionLogin(session, resultDTO);
+        log.info("로그인 성공" + cookie.toString());
 
         // session 인증 위해 제작한 UUID key를 내려보내야 함.
         return ResponseEntity.status(HttpStatus.OK)
-                .header(HttpHeaders.SET_COOKIE, String.valueOf(cookie))
+                .header(HttpHeaders.SET_COOKIE, cookie.getName() + "=" + cookie.getValue() + "; Path=" + cookie.getPath() + "; HttpOnly")
                 .body(resultDTO); // 200 성공 코드 및 쿠키와 사용자 정보 반환
     }
 
 
+
+    /** userId는 주어진 사용자 정보 json에서 추출해서 사용*/
     @PostMapping("/user/checkLogin") // 로그인 인증만을 확인하기 위한 용도의 임시 URL. 실제에서는 사용되지 않음.
     public ResponseEntity<Void> checkLogin(HttpServletRequest request) {
         // 변수로 이름 조회해야 하므로, cookieValue 대신 request에서 직접 Cookie 찾기
+
+        HttpSession session = request.getSession();
+
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (COOKIE_NAME.equals(cookie.getName())) {
                     String cookieValue = cookie.getValue();
                     // 쿠키 값으로 로그인 세션 확인
-                    return !loginService.sessionCheck(cookieValue).equals("None") ?
+                    return !loginService.sessionCheck(session, cookieValue) ?
                             ResponseEntity.status(HttpStatus.OK).build() :
                             ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
                 }
@@ -73,7 +79,7 @@ public class LoginApiController {
         }
         
         // 쿠키를 불러오지 못한 경우 다른 에러 코드 반환
-        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
 

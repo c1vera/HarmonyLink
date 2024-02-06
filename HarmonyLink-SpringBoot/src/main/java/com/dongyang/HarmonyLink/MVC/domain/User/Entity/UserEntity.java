@@ -1,7 +1,7 @@
-package com.dongyang.HarmonyLink.MVC.domain.Entity;
+package com.dongyang.HarmonyLink.MVC.domain.User.Entity;
 
-import com.dongyang.HarmonyLink.MVC.domain.DTO.UserDTO;
-import com.dongyang.HarmonyLink.MVC.domain.Entity.superEntitys.BaseTimeEntity;
+import com.dongyang.HarmonyLink.MVC.domain.User.DTO.UserDTO;
+import com.dongyang.HarmonyLink.MVC.domain._Super.Entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,6 +1,6 @@
 package com.dongyang.HarmonyLink.MVC.ApiContorller;
 
-import com.dongyang.HarmonyLink.MVC.domain.DTO.UserDTO;
+import com.dongyang.HarmonyLink.MVC.domain.User.DTO.UserDTO;
 import com.dongyang.HarmonyLink.MVC.Service.RegisterService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -43,7 +43,7 @@ public class RegisterApiController {
      * 용도 : 사이트에서 회원가입을 요청.
      * 수행 내역 : 회원 가입(POST)
      * */
-    @PostMapping("/user/requestRegister")
+    @PostMapping("/user/Register")
     public void register(@RequestBody UserDTO dto) {
         log.info(dto.toString());
 
@@ -51,6 +51,25 @@ public class RegisterApiController {
         UserDTO resultDTO = registerService.register(dto);
 
         // 회원가입완료 시 어디로 가느냐에 따라, resultDTO 사용 안할수 있음.
+    }
+
+
+    /**
+     * 사용대상 : User
+     * 용도 : 사이트에서 회원정보 수정
+     * 수행 내역 : 회원 정보 수정(PATCH)
+     * */
+
+    @PatchMapping("/user/Register")
+    public void patchUser(@RequestBody UserDTO dto) {
+        UserDTO resultDTO = registerService.patchUser(dto);
+
+        return ;
+    }
+
+    @DeleteMapping("/user/Register")
+    public void deleteUser(@RequestBody UserDTO dto) {
+        registerService.deleteUser(dto);
     }
 
 
