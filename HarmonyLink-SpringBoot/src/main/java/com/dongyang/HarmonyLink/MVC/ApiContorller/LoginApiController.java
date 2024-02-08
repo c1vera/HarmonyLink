@@ -12,8 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.dongyang.HarmonyLink.Manager.SessionConst.COOKIE_NAME;
-
 @RequestMapping("/api/v1")
 @RestController
 @Slf4j
@@ -68,10 +66,10 @@ public class LoginApiController {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
-                if (COOKIE_NAME.equals(cookie.getName())) {
+                if ("session_id".equals(cookie.getName())) {
                     String cookieValue = cookie.getValue();
                     // 쿠키 값으로 로그인 세션 확인
-                    return !loginService.sessionCheck(session, cookieValue) ?
+                    return loginService.sessionCheck(session, cookieValue).orElse(null) != null ?
                             ResponseEntity.status(HttpStatus.OK).build() :
                             ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
                 }

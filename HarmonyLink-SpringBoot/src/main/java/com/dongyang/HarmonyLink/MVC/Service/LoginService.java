@@ -10,6 +10,8 @@ import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @Slf4j
 public class LoginService {
@@ -42,7 +44,8 @@ public class LoginService {
         return sessionManager.sessionLogin(session, user);
     }
 
-    public boolean sessionCheck(HttpSession session, String sessionName) {
+    /** 별도로 쓸데가.. 있을까? */
+    public Optional<UserDTO> sessionCheck(HttpSession session, String sessionName) {
         return sessionManager.sessionCheck(session, sessionName);
     }
 

@@ -4,6 +4,7 @@ import com.dongyang.HarmonyLink.MVC.domain.User.Entity.UserEntity;
 import lombok.*;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @ToString
 public class UserDTO {
@@ -21,12 +22,6 @@ public class UserDTO {
     private String nickname;
 
     private String mbti;
-
-//    public UserDTO() {
-//    }
-    
-//    @DateTimeFormat(pattern = "yyyy-MM-dd")
-//    private LocalDateTime date; // BaseTimeEntity 추가에 따른 변경방안 생각해보기.
 
     public static UserDTO toDTO(UserEntity entity) {
         return new UserDTO(
