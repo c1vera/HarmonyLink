@@ -29,8 +29,9 @@ const LoginPage: React.FC = () => {
 
   /** 로그인 POST 요청 */
   const handleLogin = () => {
-    axios
-      .post("http://localhost:8080/api/v1/user/requestLogin", { id, pw })
+    axios.post("http://localhost:8080/api/v1/user/requestLogin", { id, pw }, {
+    withCredentials: true // 쿠키 저장
+  })
       .then((result) => {
         dispatch(loginUser(result.data.user));
         // 로그인 성공 처리
