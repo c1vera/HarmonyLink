@@ -6,24 +6,30 @@ import com.dongyang.HarmonyLink.MVC.domain.Article.Entity.ArticleEntity;
 import com.dongyang.HarmonyLink.MVC.domain.User.DTO.UserDTO;
 import com.dongyang.HarmonyLink.MVC.domain.User.Entity.UserEntity;
 import com.dongyang.HarmonyLink.Manager.SessionManager;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Optional;
+
 @Service
 public class PostService {
 
     private PostRepository postRepository;
-    private SessionManager sessionManager;
 
     public PostService(PostRepository postRepository, SessionManager sessionManager) {
         this.postRepository = postRepository;
-        this.sessionManager = sessionManager;
     }
 
+    public ArticlePostDTO getArticle(Long postKey) {
+        ArticleEntity entity = postRepository.findById(postKey)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 게시글이 존재하지 않음"));
+
+
+        return ArticlePostDTO.toDTO(entity);
+    }
 
     @Transactional
     public void postArticle(UserDTO user, ArticlePostDTO dto) {
@@ -31,4 +37,6 @@ public class PostService {
 
         postRepository.save(ArticleEntity.toEntity(dto, writeUser));
     }
+
+
 }

@@ -4,6 +4,7 @@ import com.dongyang.HarmonyLink.MVC.domain.User.DTO.UserDTO;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import java.util.UUID;
 /** 사용자의 로그인, 로그아웃 등에 사용되는 session을 관리하기 위한 코드 집합입니다.
  * 싱글 톤을 위해 Configuration 사용. */
 @Configuration
+@Slf4j
 public class SessionManager {
 
     /** 쿠키와 세션 생성 */
@@ -45,17 +47,19 @@ public class SessionManager {
      * */
     public Optional<UserDTO> getAuthUser(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        String cookieValue = getCookieValueForSession(session, request.getCookies());
+        String cookieValue = getCookieValueForSession(request.getCookies());
 
-        if(cookieValue.equals("")) return null;
+        if(cookieValue.equals("")) {
+            log.info("문제발생.");
+            return Optional.empty(); // orElseThrow는 'Optional.empty()'를 받는 경우 에러 처리함.
+        }
 
         return sessionCheck(session, cookieValue);
 
     }
 
     /** session_id 쿠키 찾아서 uuid value값 찾기. */
-    public String getCookieValueForSession(HttpSession session, Cookie[] cookies) {
-        // Cookie[] cookies = request.getCookies();
+    public String getCookieValueForSession(Cookie[] cookies) {
         String cookieValue = "";
         if (cookies != null) {
             for (Cookie cookie : cookies) {

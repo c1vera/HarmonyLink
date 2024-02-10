@@ -6,9 +6,13 @@ import com.dongyang.HarmonyLink.MVC.domain.User.DTO.UserDTO;
 import com.dongyang.HarmonyLink.MVC.domain.User.Entity.UserEntity;
 import com.dongyang.HarmonyLink.Manager.SessionManager;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
@@ -31,7 +35,7 @@ public class LoginService {
     public UserDTO tryLogin(LoginDTO loginDTO) {
 
         UserEntity user = userRepository.tryLogin(loginDTO.getId(), loginDTO.getPw())
-                .orElseThrow(() -> new IllegalArgumentException("로그인 실패. 동일한 아이디가 없음."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인 실패. 동일한 아이디가 없음."));
 
         return UserDTO.toDTO(user);
     }
@@ -39,14 +43,19 @@ public class LoginService {
     /** 로그인 권한 확인 위한 session 생성 작업
      * 참고 : 권한 확인 방법 == session attribute 값의 유무 확인 */
     public Cookie sessionLogin(HttpSession session, UserDTO user) {
+        // if(!session.isNew()) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "이미 로그인한 회원입니다.");
+        // 위 에러처리는 로그아웃 기능 구현 완료 후 수행.
 
-        // 상수UUID - UUID 쌍의 쿠키를 만들고, session에는 UUID - 사용자id와 같은 키값쌍을 저장해둠
+        // 'session_id' - UUID 쌍의 쿠키를 만들고, session에는 UUID - UserDTO와 같은 키값쌍을 저장해둠
         return sessionManager.sessionLogin(session, user);
     }
 
-    /** 별도로 쓸데가.. 있을까? */
-    public Optional<UserDTO> sessionCheck(HttpSession session, String sessionName) {
-        return sessionManager.sessionCheck(session, sessionName);
+    @Transactional
+    public UserDTO getAuthUser(HttpServletRequest request) {
+        UserDTO userInfo = sessionManager.getAuthUser(request)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "사용자 인증 실패"));
+
+        return userInfo;
     }
 
     public void sessionLogout(HttpSession session) {
