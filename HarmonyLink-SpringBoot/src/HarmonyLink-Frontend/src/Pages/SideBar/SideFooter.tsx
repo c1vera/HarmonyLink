@@ -15,7 +15,9 @@ const Login = styled.div`
 function SideFooter() {
   return (
     <div className="UserView">
-      
+      <Link to="/write">
+        <span style={{ fontSize: "40px" }}>글쓰기</span>
+      </Link>
       <Login>      
         <UserProfile/>
       </Login>

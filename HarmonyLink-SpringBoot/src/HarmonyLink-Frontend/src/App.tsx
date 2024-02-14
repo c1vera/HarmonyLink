@@ -6,21 +6,29 @@ import RegisterPage from "./Pages/Register/RegisterPage";
 import WritePage from "./Pages/Write/WritePage";
 import PostBoard from "./Pages/PostBoard/PostBoard";
 import { Route, Routes } from "react-router-dom";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+import PrivateRoute from "./PrivateRoute";
 
 const App: React.FC = () => {
   return (
     <div className="App">
-        <SideBar />
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/postboard" element={<PostBoard />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/write" element={<WritePage />} />
-        </Routes>
+      <SideBar />
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/postboard" element={<PostBoard />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route
+          path="/write"
+          element={
+            <PrivateRoute>
+              <WritePage />
+            </PrivateRoute>
+          }
+        />
+      </Routes>
     </div>
   );
-}
+};
 
 export default App;

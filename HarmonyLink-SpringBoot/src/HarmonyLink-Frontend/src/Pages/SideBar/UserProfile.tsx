@@ -42,9 +42,7 @@ const UserProfile: React.FC = () => {
 
   return (
     <div>
-      <Link to="/write">
-        <span style={{ fontSize: "40px" }}>글쓰기</span>
-      </Link>
+      
       <br />
       {userInfo.nickname}님, 반갑습니다!{" "}
       <button onClick={handleLogout}>로그아웃</button>
