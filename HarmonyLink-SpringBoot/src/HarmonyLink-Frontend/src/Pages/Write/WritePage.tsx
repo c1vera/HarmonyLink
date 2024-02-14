@@ -4,12 +4,16 @@ import TextArea from "../../components/Textarea/Textarea";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { AppState } from "../../redux/store";
+
 const Body = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  margin:40px;
 `;
 
 const TitleMusicArea = styled.div`
@@ -41,15 +45,16 @@ const WritePage: React.FC = () => {
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [postMessage, setPostMessage] = useState<string>("");
-  const [mbti, setMbti] = useState<string>("INFP");
   const [music, setMusic] = useState<string>("노래제목");
   const navigate = useNavigate();
+  const userInfo = useSelector((state: AppState) => state.user.userInfo);
 
   const handlePost = () => {
     axios
       .post("http://localhost:8080/api/v1/user/requestPost", {
         title: title,
         content: content,
+        board: userInfo.mbti,
       }, { withCredentials: true })
       .then((result) => {
         console.log(result.data);
@@ -68,7 +73,7 @@ const WritePage: React.FC = () => {
         <TitleMusicArea>
           <MbtiArea>
             <h4>게시판</h4>
-            <p>{mbti} 게시판</p>
+            <p>{userInfo.mbti} 게시판</p>
           </MbtiArea>
 
           <MusicArea>
