@@ -50,7 +50,7 @@ const WritePage: React.FC = () => {
       .post("http://localhost:8080/api/v1/user/requestPost", {
         title: title,
         content: content,
-      })
+      }, { withCredentials: true })
       .then((result) => {
         console.log(result.data);
         navigate("/"); // 성공 시 글목록으로 리다이렉트

@@ -23,7 +23,7 @@ public class ArticlePostDTO {
     private String music_key; // api에서 어떻게 받아오느냐에 따라 자료형 변경 예정.
     private int thumbsUp;
 
-    private Long userKey;
+    private Long userKey; // 사용자의 DB Key 저장하여, 1:M 관계 수용(?)
 
     public static ArticlePostDTO toDTO(ArticleEntity entity) {
         return new ArticlePostDTO(

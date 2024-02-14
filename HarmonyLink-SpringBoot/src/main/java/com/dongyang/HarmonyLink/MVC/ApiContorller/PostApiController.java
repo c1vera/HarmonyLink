@@ -1,5 +1,6 @@
 package com.dongyang.HarmonyLink.MVC.ApiContorller;
 
+import com.dongyang.HarmonyLink.MVC.Service.LoginService;
 import com.dongyang.HarmonyLink.MVC.Service.PostService;
 import com.dongyang.HarmonyLink.MVC.domain.Article.DTO.ArticlePostDTO;
 import com.dongyang.HarmonyLink.MVC.domain.User.DTO.UserDTO;
@@ -12,26 +13,34 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
+@RequestMapping("/api/v1")
 @Slf4j
 public class PostApiController {
+    // 에러 발생은 컨트롤러가 아닌, 서비스 계층에 수행하기.
 
     private PostService postService;
-    private SessionManager sessionManager;
+    private LoginService loginService;
 
-    public PostApiController(PostService postService, SessionManager sessionManager) {
+    public PostApiController(PostService postService, LoginService loginService) {
         this.postService = postService;
-        this.sessionManager = sessionManager;
+        this.loginService = loginService;
     }
 
+
+    // 포스트의 확인은 로그인한 사용자만 가능한가?
     /** 클릭한 게시글 아이디 기준의 게시글 확인 */
-    @GetMapping("/user/article/{articleId}")
+    @GetMapping("/user/post/{postKey}")
+    public ResponseEntity<ArticlePostDTO> getArticle(@PathVariable Long postKey) {
+        ArticlePostDTO article = postService.getArticle(postKey);
+
+        return ResponseEntity.status(HttpStatus.OK).body(article);
+    }
 
     /** 게시글 작성하기 */
-    @PostMapping("/user/article")
+    @PostMapping("/user/requestPost")
     public ResponseEntity<Void> postArticle(HttpServletRequest request,
                                             @RequestBody ArticlePostDTO dto) {
-        UserDTO user = sessionManager.getAuthUser(request)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "사용자 인증 실패"));
+        UserDTO user = loginService.getAuthUser(request);
         // ResponseStatusException은, 예외와 동시에 Http 상태 코드를 발생 가능. 사용하기 유용할 듯??
 
         postService.postArticle(user, dto);

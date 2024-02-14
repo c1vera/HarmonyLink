@@ -29,17 +29,13 @@ public class LoginApiController {
         this.loginService = loginService;
     }
 
+
+    /** 사용자 로그인 */
     @PostMapping("/user/requestLogin")
     public ResponseEntity<UserDTO> Login(@RequestBody LoginDTO loginDTO, HttpServletRequest request) {
         log.info(loginDTO.toString());
 
         UserDTO resultDTO = loginService.tryLogin(loginDTO);
-
-        /* 로그인 대상이 알맞지 않은 경우. */
-        if(resultDTO == null) {
-            log.info("로그인 실패. 맞는 로그인 형식 아님");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 401 에러 코드
-        }
 
         // HttpSession은 Controller 단에서 작성하기.
         HttpSession session = request.getSession();
@@ -54,31 +50,47 @@ public class LoginApiController {
                 .body(resultDTO); // 200 성공 코드 및 쿠키와 사용자 정보 반환
     }
 
+    /** 사용자 로그아웃 */
+    @PostMapping("/user/requestLogout")
+    public ResponseEntity<Void> Logout(HttpServletRequest request) {
+        loginService.getAuthUser(request); // 로그인한 사용자인지 확인
 
+        loginService.sessionLogout(request.getSession()); // sessionAttribute 제거
 
-    /** userId는 주어진 사용자 정보 json에서 추출해서 사용*/
-    @PostMapping("/user/checkLogin") // 로그인 인증만을 확인하기 위한 용도의 임시 URL. 실제에서는 사용되지 않음.
-    public ResponseEntity<Void> checkLogin(HttpServletRequest request) {
-        // 변수로 이름 조회해야 하므로, cookieValue 대신 request에서 직접 Cookie 찾기
+        Cookie cookie = new Cookie("session_id", null);
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
 
-        HttpSession session = request.getSession();
-
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("session_id".equals(cookie.getName())) {
-                    String cookieValue = cookie.getValue();
-                    // 쿠키 값으로 로그인 세션 확인
-                    return loginService.sessionCheck(session, cookieValue).orElse(null) != null ?
-                            ResponseEntity.status(HttpStatus.OK).build() :
-                            ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-                }
-            }
-        }
-        
-        // 쿠키를 불러오지 못한 경우 다른 에러 코드 반환
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity.status(HttpStatus.OK)
+                .header(HttpHeaders.SET_COOKIE, cookie.getName() + "=" + cookie.getValue() + "; Path=" + cookie.getPath() + "; HttpOnly")
+                .build();
     }
+
+
+
+//    /** userId는 주어진 사용자 정보 json에서 추출해서 사용*/
+//    @PostMapping("/user/checkLogin") // 로그인 인증만을 확인하기 위한 용도의 임시 URL. 실제에서는 사용되지 않음.
+//    public ResponseEntity<Void> checkLogin(HttpServletRequest request) {
+//        // 변수로 이름 조회해야 하므로, cookieValue 대신 request에서 직접 Cookie 찾기
+//
+//        HttpSession session = request.getSession();
+//
+//        Cookie[] cookies = request.getCookies();
+//        if (cookies != null) {
+//            for (Cookie cookie : cookies) {
+//                if ("session_id".equals(cookie.getName())) {
+//                    String cookieValue = cookie.getValue();
+//                    // 쿠키 값으로 로그인 세션 확인
+//                    return loginService.getAuthUser(session, cookieValue).orElse(null) != null ?
+//                            ResponseEntity.status(HttpStatus.OK).build() :
+//                            ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//                }
+//            }
+//        }
+//
+//        // 쿠키를 불러오지 못한 경우 다른 에러 코드 반환
+//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+//    }
 
 
 }

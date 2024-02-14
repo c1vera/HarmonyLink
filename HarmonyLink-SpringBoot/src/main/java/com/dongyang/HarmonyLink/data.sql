@@ -1,0 +1,1 @@
+INSERT INTO User_Entity(CREATED_DATE, MODIFIED_DATE, userKey, id, pw, email, name, nickname, mbti) values(1, 'id', 'pw', 'email@email.com', 'root', 'root', 'mbti');

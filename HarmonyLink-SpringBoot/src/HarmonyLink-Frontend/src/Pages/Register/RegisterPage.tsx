@@ -29,7 +29,7 @@ const RegisterPage: React.FC = () => {
   /** 회원가입 POST 요청 */
   const handleRegister = () => {
     axios
-      .post("http://localhost:8080/api/v1/user/requestRegister", {
+      .post("http://localhost:8080/api/v1/user/Register", {
         id: id,
         pw: pw,
         email: email,

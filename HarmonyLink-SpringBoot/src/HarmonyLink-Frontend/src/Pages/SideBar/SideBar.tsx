@@ -37,7 +37,9 @@ function SideBar() {
             <h3>HarmonyLink</h3>
           </Link>
         </Logo>
-        <Content>본문</Content>
+        <Content><Link to="/postboard">
+            <h3>글목록</h3>
+          </Link></Content>
         <UserView/>
       </Body>
     </div>
