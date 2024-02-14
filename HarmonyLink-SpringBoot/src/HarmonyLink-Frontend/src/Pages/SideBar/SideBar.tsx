@@ -13,7 +13,6 @@ const Body = styled.div`
 `;
 
 const Logo = styled.div`
-  font-size: 40px;
   flex: 1;
   display: flex;
   justify-content: center;
@@ -34,7 +33,7 @@ function SideBar() {
       <Body>
         <Logo>
           <Link to="/">
-            <h3>HarmonyLink</h3>
+            <h2>HarmonyLink</h2>
           </Link>
         </Logo>
         <Content><Link to="/postboard">

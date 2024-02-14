@@ -6,6 +6,7 @@ import RegisterPage from "./Pages/Register/RegisterPage";
 import WritePage from "./Pages/Write/WritePage";
 import PostBoard from "./Pages/PostBoard/PostBoard";
 import { Route, Routes } from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const App: React.FC = () => {
   return (

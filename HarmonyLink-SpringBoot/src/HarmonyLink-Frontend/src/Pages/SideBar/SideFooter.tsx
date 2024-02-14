@@ -15,7 +15,7 @@ const Login = styled.div`
 function SideFooter() {
   return (
     <div className="UserView">
-      <Link to="/write">글쓰기</Link>
+      
       <Login>      
         <UserProfile/>
       </Login>
