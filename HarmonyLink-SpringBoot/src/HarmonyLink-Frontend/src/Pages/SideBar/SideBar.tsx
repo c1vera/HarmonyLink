@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import "./SideBar.css";
-import UserView from "../UserView";
+import UserView from "./SideFooter";
 
 const Body = styled.div`
   height: 100%;

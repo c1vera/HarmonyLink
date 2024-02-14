@@ -1,10 +1,8 @@
 import styled from "styled-components";
-import "./RegisterPage.css";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Input from '../../components/Input/Input';
-
 
 const Body = styled.div`
   height: 100%;
@@ -13,8 +11,6 @@ const Body = styled.div`
   align-items: center;
   text-align: center;
 `;
-
-
 
 const RegisterPage: React.FC = () => {
   const [id, setId] = useState<string>("");

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import "./UserView.css";
+import UserProfile from "./UserProfile";
 
 const Login = styled.div`
   flex: 1;
@@ -12,17 +12,15 @@ const Login = styled.div`
   padding: 20px 0px;
 `;
 
-function UserView() {
+function SideFooter() {
   return (
     <div className="UserView">
       <Link to="/write">글쓰기</Link>
       <Login>      
-      
-        <Link to="/login">로그인</Link>
-        <Link to="/register">회원가입</Link>
+        <UserProfile/>
       </Login>
     </div>
   );
 }
 
-export default UserView;
+export default SideFooter;

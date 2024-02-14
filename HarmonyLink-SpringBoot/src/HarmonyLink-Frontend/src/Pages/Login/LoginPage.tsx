@@ -3,9 +3,10 @@ import "./LoginPage.css";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { loginUser } from "../../features/auth/authSlice";
 import Input from '../../components/Input/Input';
+import { useDispatch } from "react-redux";
+import { loginUser } from '../../redux/actions/userActions';
+import { AppDispatch } from '../../redux/store';
 
 const Body = styled.div`
   height: 100%;
@@ -25,7 +26,7 @@ const LoginPage: React.FC = () => {
   const [pw, setPw] = useState<string>("");
   const [loginMessage, setLoginMessage] = useState<string>("");
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   /** 로그인 POST 요청 */
   const handleLogin = () => {
@@ -33,8 +34,8 @@ const LoginPage: React.FC = () => {
     withCredentials: true // 쿠키 저장
   })
       .then((result) => {
-        dispatch(loginUser(result.data.user));
         // 로그인 성공 처리
+        dispatch(loginUser(result.data));
         console.log(result.data);
         navigate("/"); // 홈으로 리다이렉트
       })
