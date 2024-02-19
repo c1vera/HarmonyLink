@@ -1,7 +1,9 @@
 package com.dongyang.HarmonyLink.MVC.ApiContorller;
 
+import com.dongyang.HarmonyLink.MVC.Service.LoginService;
 import com.dongyang.HarmonyLink.MVC.domain.User.DTO.UserDTO;
 import com.dongyang.HarmonyLink.MVC.Service.RegisterService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +15,11 @@ import org.springframework.web.bind.annotation.*;
 public class RegisterApiController {
     private RegisterService registerService;
 
-    public RegisterApiController(RegisterService registerService) {
+    private LoginService loginService;
+
+    public RegisterApiController(RegisterService registerService, LoginService loginService) {
         this.registerService = registerService;
+        this.loginService = loginService;
     }
 
     /**
@@ -61,23 +66,24 @@ public class RegisterApiController {
      * */
 
     @PatchMapping("/user/Register")
-    public void patchUser(@RequestBody UserDTO dto) {
-        UserDTO resultDTO = registerService.patchUser(dto);
+    public void patchUser(HttpServletRequest request, @RequestBody UserDTO dto) {
+        UserDTO user = loginService.getAuthUser(request);
 
-        return ;
+        // 현재 권한을 지니고 작업을 수행하는 사용자가 작업대상을 작성했던 인원이 맞는지 확인하는 함수가 필요하다.
+
+
+        UserDTO resultDTO = registerService.patchUser(dto);
     }
 
+
+    /**
+     * 사용대상 : User
+     * 용도 : 사이트에서 회원 탈퇴
+     * 수행 내역 : 회원 정보 삭제(DELETE)
+     * */
     @DeleteMapping("/user/Register")
     public void deleteUser(@RequestBody UserDTO dto) {
         registerService.deleteUser(dto);
     }
-
-
-//    @PatchMapping("/user/requestInfoEdit")
-//    public void edit(@RequestBody UserDTO dto) {
-//
-//        UserDTO resultDTO = registerService.patch(dto);
-//    }
-
 
 }

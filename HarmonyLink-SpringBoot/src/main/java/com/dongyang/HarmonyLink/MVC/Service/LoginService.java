@@ -1,6 +1,7 @@
 package com.dongyang.HarmonyLink.MVC.Service;
 
 import com.dongyang.HarmonyLink.MVC.Repository.UserRepository;
+import com.dongyang.HarmonyLink.MVC.domain.Article.DTO.ArticleDTO;
 import com.dongyang.HarmonyLink.MVC.domain.User.DTO.LoginDTO;
 import com.dongyang.HarmonyLink.MVC.domain.User.DTO.UserDTO;
 import com.dongyang.HarmonyLink.MVC.domain.User.Entity.UserEntity;
@@ -49,7 +50,15 @@ public class LoginService {
         // 'session_id' - UUID 쌍의 쿠키를 만들고, session에는 UUID - UserDTO와 같은 키값쌍을 저장해둠
         return sessionManager.sessionLogin(session, user);
     }
+    
+    /** sessionAttribute 삭제 수행
+     * */
+    public void sessionLogout(HttpSession session) {
+        sessionManager.sessionLogout(session);
+    }
 
+
+    /** 현재 사용자의 '권한' 확인 + 로그인 한 사용자의 정보를 DTO로 반환 */
     @Transactional
     public UserDTO getAuthUser(HttpServletRequest request) {
         UserDTO userInfo = sessionManager.getAuthUser(request)
@@ -58,8 +67,12 @@ public class LoginService {
         return userInfo;
     }
 
-    public void sessionLogout(HttpSession session) {
-        sessionManager.sessionLogout(session);
-    }
+
+    /** 세션에서 getAuthUser()로 땡겨온 사용자 정보가, 컨텐츠를 작성하거나 사용했던 사용자와 동일한지 확인.
+     * => 수정 및 삭제 등의 권한 참조에 사용.*/
+    public void isUserSame() { }
+
+
+
 
 }

@@ -26,6 +26,9 @@ public class ArticleEntity extends BaseTimeEntity {
     private String title;
 
     @Column
+    private String type;
+
+    @Column
     private String content;
 
     @Column
@@ -51,6 +54,7 @@ public class ArticleEntity extends BaseTimeEntity {
         return new ArticleEntity(
                 dto.getPost_key(),
                 dto.getTitle(),
+                dto.getType(),
                 dto.getContent(),
                 dto.getMusic_key(),
                 dto.getThumbsUp(),
