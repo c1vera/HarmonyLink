@@ -8,6 +8,7 @@ import PostBoard from "./Pages/PostBoard/PostBoard";
 import { Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import PrivateRoute from "./PrivateRoute";
+import Test from "./Pages/Spotify/Test"
 
 const App: React.FC = () => {
   return (
@@ -18,6 +19,7 @@ const App: React.FC = () => {
         <Route path="/postboard" element={<PostBoard />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/test" element={<Test />} />
         <Route
           path="/write"
           element={
