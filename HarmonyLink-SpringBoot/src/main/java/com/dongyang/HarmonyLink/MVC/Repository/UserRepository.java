@@ -1,6 +1,7 @@
 package com.dongyang.HarmonyLink.MVC.Repository;
 
 import com.dongyang.HarmonyLink.MVC.domain.User.Entity.UserEntity;
+import jakarta.persistence.EntityManager;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -31,6 +32,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
                     "where id = :id or email = :email",
             nativeQuery = true)
     Optional<UserEntity> checkAlreadyRegister(@Param("id") String id, @Param("email") String email);
+
 
     /** id, pw로 로그인 시도 */
     @Query(value =

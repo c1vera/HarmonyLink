@@ -19,6 +19,7 @@ import lombok.ToString;
 public class ArticlePostDTO {
     private Long post_key;
     private String title;
+    private String type; // 어떤 MBTI 게시판의 글인지 확인
     private String content;
     private String music_key; // api에서 어떻게 받아오느냐에 따라 자료형 변경 예정.
     private int thumbsUp;
@@ -29,6 +30,7 @@ public class ArticlePostDTO {
         return new ArticlePostDTO(
                 entity.getPost_key(),
                 entity.getTitle(),
+                entity.getType(),
                 entity.getContent(),
                 entity.getMusic_key(),
                 entity.getThumbsUp(),

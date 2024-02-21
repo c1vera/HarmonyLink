@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1")
 @Slf4j
@@ -35,6 +37,19 @@ public class PostApiController {
 
         return ResponseEntity.status(HttpStatus.OK).body(article);
     }
+
+
+    /** 모든 게시글 제공용. 필터링 기능이 고려되지 않음. */
+    @GetMapping("/user/postList")
+    public ResponseEntity<List<ArticlePostDTO>> getList() {
+        List<ArticlePostDTO> list = postService.getAllArticle();
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(list);
+
+    }
+
+
 
     /** 게시글 작성하기 */
     @PostMapping("/user/requestPost")

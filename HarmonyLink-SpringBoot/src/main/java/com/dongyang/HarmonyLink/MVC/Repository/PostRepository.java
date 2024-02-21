@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RestController;
 
 @Repository
-public interface PostRepository extends JpaRepository<ArticleEntity, Long> {
+public interface PostRepository extends JpaRepository<ArticleEntity, Long>, PostRepositoryCustom {
 }

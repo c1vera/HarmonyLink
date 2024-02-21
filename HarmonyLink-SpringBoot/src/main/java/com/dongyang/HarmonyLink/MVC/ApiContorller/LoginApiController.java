@@ -60,7 +60,8 @@ public class LoginApiController {
         Cookie cookie = new Cookie("session_id", null);
         cookie.setMaxAge(0);
         cookie.setPath("/");
-
+        
+        // 이름 동일한 비어있는 쿠키 내려보내 쿠키 삭제시키기
         return ResponseEntity.status(HttpStatus.OK)
                 .header(HttpHeaders.SET_COOKIE, cookie.getName() + "=" + cookie.getValue() + "; Path=" + cookie.getPath() + "; HttpOnly")
                 .build();

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,12 +32,20 @@ public class PostService {
         return ArticlePostDTO.toDTO(entity);
     }
 
+    /** 모든 게시글 반환(필터링 X) */
+    public List<ArticlePostDTO> getAllArticle() {
+        return postRepository.findAll().stream()
+                .map(i -> ArticlePostDTO.toDTO(i)).toList();
+    }
+
+    /** 게시글 작성 */
     @Transactional
     public void postArticle(UserDTO user, ArticlePostDTO dto) {
         UserEntity writeUser = UserEntity.toEntity(user);
 
         postRepository.save(ArticleEntity.toEntity(dto, writeUser));
     }
+
 
 
 }
