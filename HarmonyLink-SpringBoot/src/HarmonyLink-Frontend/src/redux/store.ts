@@ -1,14 +1,13 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
-import { userReducer } from './reducers/userReducer'; 
+import { userReducer } from './reducers/userReducer';
 import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage'; // localStorage를 사용할 저장소로 import
+import sessionStorage from 'redux-persist/lib/storage/session'; // 세션 스토리지를 사용하기 위해 import
 
-// Persist를 위한 설정
+// Persist 설정을 세션 스토리지로 변경
 const persistConfig = {
   key: 'root',
-  storage,
-  whitelist: ['user'], // 여기에 유지하고 싶은 상태의 리듀서 이름을 배열 형태로 추가
-  // blacklist: [], // 유지하지 않을 상태의 리듀서 이름을 배열 형태로 추가
+  storage: sessionStorage, // 여기에서 storage를 세션 스토리지로 설정
+  whitelist: ['user'], // 상태 유지를 원하는 리듀서를 지정
 };
 
 // 리듀서들을 합치는 과정
