@@ -54,7 +54,7 @@ const WritePage: React.FC = () => {
       const result = await axios.post("http://localhost:8080/api/v1/user/requestPost", {
         title: title,
         content: content,
-        board: userInfo.mbti,
+        type: userInfo.mbti,
       }, { withCredentials: true });
   
       console.log(result.data);
