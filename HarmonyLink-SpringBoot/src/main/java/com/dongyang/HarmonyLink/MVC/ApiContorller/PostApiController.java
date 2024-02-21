@@ -32,7 +32,7 @@ public class PostApiController {
     // 포스트의 확인은 로그인한 사용자만 가능한가?
     /** 클릭한 게시글 아이디 기준의 게시글 확인 */
     @GetMapping("/user/post/{postKey}")
-    public ResponseEntity<ArticlePostDTO> getArticle(@PathVariable Long postKey) {
+    public ResponseEntity<ArticlePostDTO> getArticle(@PathVariable("postKey") Long postKey) {
         ArticlePostDTO article = postService.getArticle(postKey);
 
         return ResponseEntity.status(HttpStatus.OK).body(article);
