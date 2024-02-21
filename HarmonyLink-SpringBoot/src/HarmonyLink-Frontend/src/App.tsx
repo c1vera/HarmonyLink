@@ -9,6 +9,7 @@ import { Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import PrivateRoute from "./PrivateRoute";
 import Test from "./Pages/Spotify/Test"
+import PostDetailPage from "./Pages/PostDetail/PostDetailPage";
 
 const App: React.FC = () => {
   return (
@@ -28,6 +29,7 @@ const App: React.FC = () => {
             </PrivateRoute>
           }
         />
+        <Route path="/detail/:id" element={<PostDetailPage />} />
       </Routes>
     </div>
   );

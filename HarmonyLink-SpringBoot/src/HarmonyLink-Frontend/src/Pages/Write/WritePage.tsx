@@ -13,7 +13,7 @@ const Body = styled.div`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  margin:40px;
+  padding:40px;
 `;
 
 const TitleMusicArea = styled.div`
