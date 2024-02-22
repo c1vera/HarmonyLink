@@ -13,7 +13,7 @@ const Body = styled.div`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  margin:40px;
+  padding:40px;
 `;
 
 const TitleMusicArea = styled.div`
@@ -49,22 +49,22 @@ const WritePage: React.FC = () => {
   const navigate = useNavigate();
   const userInfo = useSelector((state: AppState) => state.user.userInfo);
 
-  const handlePost = () => {
-    axios
-      .post("http://localhost:8080/api/v1/user/requestPost", {
+  const handlePost = async () => {
+    try {
+      const result = await axios.post("http://localhost:8080/api/v1/user/requestPost", {
         title: title,
         content: content,
-        board: userInfo.mbti,
-      }, { withCredentials: true })
-      .then((result) => {
-        console.log(result.data);
-        navigate("/"); // 성공 시 글목록으로 리다이렉트
-      })
-      .catch((error) => {
-        console.log("글쓰기 오류: ", error);
-        setPostMessage("글쓰기에 문제가 발생했어요.");
-      });
+        type: userInfo.mbti,
+      }, { withCredentials: true });
+  
+      console.log(result.data);
+      navigate("/"); // 성공 시 글목록으로 리다이렉트
+    } catch (error) {
+      console.log("글쓰기 오류: ", error);
+      setPostMessage("글쓰기에 문제가 발생했어요.");
+    }
   };
+  
 
   return (
     <div className="MainPage">

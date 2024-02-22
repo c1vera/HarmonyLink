@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { AppState, AppDispatch } from "../../redux/store";
+import { AppState, AppDispatch, persistor } from "../../redux/store";
 import { logoutUser } from "../../redux/actions/userActions";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -24,11 +24,16 @@ const UserProfile: React.FC = () => {
         // 로그아웃 성공 처리
         dispatch(logoutUser());
         navigate("/");
+        persistor.purge().then(() => {
+          console.log('Logout successful. Persisted state has been removed.');
+        });
       })
       .catch((error) => {
         // 에러 처리
         console.error("Logout failed:", error);
       });
+
+      
   };
 
   if (!userInfo) {
