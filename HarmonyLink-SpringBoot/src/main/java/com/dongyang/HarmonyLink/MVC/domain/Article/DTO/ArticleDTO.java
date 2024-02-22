@@ -19,6 +19,8 @@ import java.time.LocalDateTime;
 public class ArticleDTO {
     private Long post_key;
     private String title;
+    private String type; // 어떤 MBTI 게시판의 글인지 확인
+    private int view; // 조회수 기능
     private String content;
     private String music_key; // api에서 어떻게 받아오느냐에 따라 자료형 변경 예정.
     private int thumbsUp;

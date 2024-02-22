@@ -28,6 +28,9 @@ public class ArticleEntity extends BaseTimeEntity {
     @Column
     private String type;
 
+    @Column(columnDefinition = "integer default 0", nullable = false) // null 불가능, 디폴트값 0
+    private int view;
+
     @Column
     private String content;
 
@@ -50,11 +53,18 @@ public class ArticleEntity extends BaseTimeEntity {
     @JoinColumn(name="user_key")
     private UserEntity user;
 
+
+    /** 게시글의 조회수 1 증가. */
+    public void increaseView() {
+        this.view += 1;
+    }
+
     public static ArticleEntity toEntity(ArticlePostDTO dto, UserEntity userEntity) {
         return new ArticleEntity(
                 dto.getPost_key(),
                 dto.getTitle(),
                 dto.getType(),
+                dto.getView(),
                 dto.getContent(),
                 dto.getMusic_key(),
                 dto.getThumbsUp(),

@@ -1,6 +1,7 @@
 package com.dongyang.HarmonyLink.MVC.Service;
 
 import com.dongyang.HarmonyLink.MVC.Repository.PostRepository;
+import com.dongyang.HarmonyLink.MVC.domain.Article.DTO.ArticleDTO;
 import com.dongyang.HarmonyLink.MVC.domain.Article.DTO.ArticlePostDTO;
 import com.dongyang.HarmonyLink.MVC.domain.Article.Entity.ArticleEntity;
 import com.dongyang.HarmonyLink.MVC.domain.User.DTO.UserDTO;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,15 +26,26 @@ public class PostService {
         this.postRepository = postRepository;
     }
 
+    /** 게시글 조회수 증가 및 해당 게시글 정보 가져오기 */
     public ArticlePostDTO getArticle(Long postKey) {
+
         ArticleEntity entity = postRepository.findById(postKey)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 게시글이 존재하지 않음"));
 
+        entity.increaseView(); // 조회수 증가
+        postRepository.save(entity); // 조회수가 증가된 entity 저장
 
         return ArticlePostDTO.toDTO(entity);
     }
 
-    /** 모든 게시글 반환(필터링 X) */
+    /** 특정 필터링의 게시글 목록 반환 */
+    public List<ArticlePostDTO> getFilteredList(String mbti) {
+
+        return postRepository.findByInputMbti(mbti).stream()
+                .map(i -> ArticlePostDTO.toDTO(i)).toList();
+    }
+
+    /** '모든' 게시글 반환(필터링 X) */
     public List<ArticlePostDTO> getAllArticle() {
         return postRepository.findAll().stream()
                 .map(i -> ArticlePostDTO.toDTO(i)).toList();
@@ -40,10 +53,12 @@ public class PostService {
 
     /** 게시글 작성 */
     @Transactional
-    public void postArticle(UserDTO user, ArticlePostDTO dto) {
+    public ArticlePostDTO postArticle(UserDTO user, ArticlePostDTO dto) {
         UserEntity writeUser = UserEntity.toEntity(user);
 
-        postRepository.save(ArticleEntity.toEntity(dto, writeUser));
+        ArticleEntity result = postRepository.save(ArticleEntity.toEntity(dto, writeUser));
+
+        return ArticlePostDTO.toDTO(result);
     }
 
 
