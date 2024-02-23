@@ -31,7 +31,6 @@ public class SpotifyController {
 
     @GetMapping("/api/spotify/search/{name}")
     public ResponseEntity<String> getSearchAlbum(@PathVariable String name) {
-        log.info("controller used");
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(spotifySearchService.searchToAlbumName(spotifyTokenService.getAccessToken(), name));

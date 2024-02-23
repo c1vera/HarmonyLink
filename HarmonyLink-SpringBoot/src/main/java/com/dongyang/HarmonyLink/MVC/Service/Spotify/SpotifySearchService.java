@@ -28,8 +28,6 @@ public class SpotifySearchService {
     /**
      * 앨범 이름만을 기준으로 검색하는 형식. 클라이언트에서 추가 폼을 활용하여 검색 타입 지정시킬 수 있게 가능함.
      * => java에서 UriComponentsBuilder를 활용하여 각 query를 알맞게 추가하여 GET 요청 URL 작성.
-     *
-     * @return
      */
     public String searchToAlbumName(String accessToken, String name) {
 

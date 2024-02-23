@@ -17,6 +17,7 @@ import lombok.ToString;
 @Getter
 @ToString
 public class ArticlePostDTO {
+    /* 게시글 정보 부분 */
     private Long post_key;
     private String title;
     private String type; // 어떤 MBTI 게시판의 글인지 확인
@@ -25,7 +26,9 @@ public class ArticlePostDTO {
     private String music_key; // api에서 어떻게 받아오느냐에 따라 자료형 변경 예정.
     private int thumbsUp;
 
+    /* user의 정보 부분 */
     private Long userKey; // 사용자의 DB Key 저장하여, 1:M 관계 수용(?)
+    private String nickname; // 사용자 이름
 
     public static ArticlePostDTO toDTO(ArticleEntity entity) {
         return new ArticlePostDTO(
@@ -36,7 +39,8 @@ public class ArticlePostDTO {
                 entity.getContent(),
                 entity.getMusic_key(),
                 entity.getThumbsUp(),
-                entity.getUser().getUserKey()
+                entity.getUser().getUserKey(),
+                entity.getUser().getNickname()
         );
     }
 
