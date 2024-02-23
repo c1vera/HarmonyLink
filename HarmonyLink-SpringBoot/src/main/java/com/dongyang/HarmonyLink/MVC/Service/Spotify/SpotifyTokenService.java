@@ -1,4 +1,4 @@
-package com.dongyang.HarmonyLink.MVC.Service;
+package com.dongyang.HarmonyLink.MVC.Service.Spotify;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -22,6 +22,13 @@ public class SpotifyTokenService {
   private String accessToken = null;
   private long expiryTime = 0;
 
+  private RestTemplate restTemplate;
+
+  public SpotifyTokenService(RestTemplate restTemplate) {
+    this.restTemplate = restTemplate;
+  }
+
+  /** 토큰이 만료되었는지 확인하고, 만료된 경우 재생성하여 제공*/
   public synchronized String getAccessToken() {
     // 현재 시간을 기준으로 토큰이 만료되었는지 확인
     if (accessToken == null || System.currentTimeMillis() >= expiryTime) {
@@ -31,13 +38,13 @@ public class SpotifyTokenService {
   }
 
   private void refreshAccessToken() {
-    RestTemplate restTemplate = new RestTemplate();
+
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-    String credentials = clientId + ":" + clientSecret;
-    String encodedCredentials = Base64.getEncoder().encodeToString(credentials.getBytes());
-    headers.add("Authorization", "Basic " + encodedCredentials);
+    String credentials = clientId + ":" + clientSecret; // clientid와 clientSecret 이용
+    String encodedCredentials = Base64.getEncoder().encodeToString(credentials.getBytes()); // base64로 암호화한다
+    headers.add("Authorization", "Basic " + encodedCredentials); // 암호화된 내용을 header로 사용함.
 
     HttpEntity<String> request = new HttpEntity<>("grant_type=client_credentials", headers);
 
