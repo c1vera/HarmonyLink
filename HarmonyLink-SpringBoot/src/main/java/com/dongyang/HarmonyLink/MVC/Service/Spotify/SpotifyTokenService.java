@@ -11,6 +11,9 @@ import java.util.Map;
 @Service
 @Slf4j
 public class SpotifyTokenService {
+  /* https://developer.spotify.com/documentation/web-api/tutorials/client-credentials-flow */
+  // 이해 시, 위 내용 참조하기!
+
 
   @Value("${spotify.client.id}")
   private String clientId = "ac7a2e1f0fd54e72a09ed09e6bd4d215";

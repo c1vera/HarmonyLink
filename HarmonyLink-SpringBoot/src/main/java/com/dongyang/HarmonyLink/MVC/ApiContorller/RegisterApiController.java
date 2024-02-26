@@ -32,15 +32,9 @@ public class RegisterApiController {
         // 중요! 사용자의 id또한 primary key 입니다.
         // db id는 사용자가 직접 알 수 없으므로, 일반 id를 사용하여 요청을 수행하도록 합니다.
 
-        /* 로그인 구현은 어떻게 할 것인가? */
-
         UserDTO dto = registerService.getInfo(id);
 
-        // == json으로 return?
-        return dto != null ?
-                ResponseEntity.status(HttpStatus.OK).body(dto) :
-                ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-
+        return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
     /**
@@ -49,13 +43,13 @@ public class RegisterApiController {
      * 수행 내역 : 회원 가입(POST)
      * */
     @PostMapping("/user/Register")
-    public void register(@RequestBody UserDTO dto) {
+    public ResponseEntity<UserDTO> register(@RequestBody UserDTO dto) {
         log.info(dto.toString());
 
         // 서비스 호출
         UserDTO resultDTO = registerService.register(dto);
 
-        // 회원가입완료 시 어디로 가느냐에 따라, resultDTO 사용 안할수 있음.
+        return ResponseEntity.status(HttpStatus.OK).body(resultDTO);
     }
 
 
@@ -66,13 +60,16 @@ public class RegisterApiController {
      * */
 
     @PatchMapping("/user/Register")
-    public void patchUser(HttpServletRequest request, @RequestBody UserDTO dto) {
+    public ResponseEntity<UserDTO> patchUser(HttpServletRequest request, @RequestBody UserDTO dto) {
         UserDTO user = loginService.getAuthUser(request);
 
         // 현재 권한을 지니고 작업을 수행하는 사용자가 작업대상을 작성했던 인원이 맞는지 확인하는 함수가 필요하다.
 
 
+
         UserDTO resultDTO = registerService.patchUser(dto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(resultDTO);
     }
 
 

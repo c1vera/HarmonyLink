@@ -18,6 +18,13 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
 
         StringBuilder inputMbti = new StringBuilder();
 
+        // 제공된 mbti 타입이 이미 완성형인 경우.
+        if(!mbti.contains("X")) {
+            return em.createQuery("select m from ArticleEntity m where m.type = :mbti", ArticleEntity.class)
+                    .setParameter("mbti", mbti)
+                    .getResultList();
+        }
+
         // X가 설정되어있는 경우
         for(int i = 0; i < mbti.length(); i++) {
             if(!mbti.contains("X")) break; // 현재 mbti에 "X" 없으면 정지.

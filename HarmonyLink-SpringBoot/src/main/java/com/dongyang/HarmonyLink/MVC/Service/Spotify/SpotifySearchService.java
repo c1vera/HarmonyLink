@@ -11,7 +11,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 
-/** 본 서비스는 일단 앨범이름 검색만을 기준으로 합니다. */
 @Service
 @Slf4j
 public class SpotifySearchService {
@@ -26,31 +25,36 @@ public class SpotifySearchService {
     }
 
     /**
-     * 앨범 이름만을 기준으로 검색하는 형식. 클라이언트에서 추가 폼을 활용하여 검색 타입 지정시킬 수 있게 가능함.
-     * => java에서 UriComponentsBuilder를 활용하여 각 query를 알맞게 추가하여 GET 요청 URL 작성.
+     * GET 요청쿼리에서 설정한 type대로 검색을 수행.
      */
-    public String searchToAlbumName(String accessToken, String name) {
+    public String typeSearch(String accessToken, String type, String name) {
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/json");
-        headers.add("Authorization", "Bearer " + accessToken);
+        headers.add("Content-Type", "application/json"); // json으로 받을 것.
+        headers.add("Authorization", "Bearer " + accessToken); // 엑세스 토큰 필수.
 
         HttpEntity<String> httpEntity = new HttpEntity<>(headers);
 
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(baseSearchingURL)
                 .queryParam("q", name)
-                .queryParam("type", "album"); // type도 수정하여 기능 확장 가능
+                .queryParam("type", type);
 
-        // String 타입을 Json을 사용할 수 있는 클래스 등으로 변환하여 얻어오는게 가능할까?
+
         ResponseEntity<String> response = restTemplate.exchange(
-                uriBuilder.toUriString(),
-                HttpMethod.GET,
-                httpEntity,
-                String.class
+                uriBuilder.toUriString(), // 요청 URL
+                HttpMethod.GET, // 통신 방식
+                httpEntity, // header 및 기타 내역
+                String.class // 값을 반환받을 형식(String외에도 커스텀 class 사용 가능)
         );
+        // ResponseEntity<String> response = restTemplate.getForEntity(Url, String.class)
+        // getForEntity를 통한 Http 통신은 header 포함 기능이 없으므로, 엑세스 토큰이 필요한 Spotify api요청에는 적합 X
 
         log.info(String.valueOf(response.getBody()));
-
+        
+        //  ============================
+        // 받아온 json을 재조립하는 코드 작성하기
+        //  ============================
+        
         return response.getBody();
     }
 

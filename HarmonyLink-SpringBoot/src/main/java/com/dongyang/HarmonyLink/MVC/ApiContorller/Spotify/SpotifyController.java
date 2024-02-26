@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -29,11 +30,11 @@ public class SpotifyController {
         return spotifyTokenService.getAccessToken();
     }
 
-    @GetMapping("/api/spotify/search/{name}")
-    public ResponseEntity<String> getSearchAlbum(@PathVariable String name) {
+    @GetMapping("/api/spotify/search") // ?type={type}&word={word} 과 같이 받아야함.
+    public ResponseEntity<String> getSearchAlbum(@RequestParam String type, @RequestParam String word) {
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(spotifySearchService.searchToAlbumName(spotifyTokenService.getAccessToken(), name));
+                .body(spotifySearchService.typeSearch(spotifyTokenService.getAccessToken(), type, word));
     }
 
 }
