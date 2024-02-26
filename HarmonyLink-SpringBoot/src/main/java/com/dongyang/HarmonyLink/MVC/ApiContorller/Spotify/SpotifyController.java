@@ -2,6 +2,7 @@ package com.dongyang.HarmonyLink.MVC.ApiContorller.Spotify;
 
 import com.dongyang.HarmonyLink.MVC.Service.Spotify.SpotifySearchService;
 import com.dongyang.HarmonyLink.MVC.Service.Spotify.SpotifyTokenService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,7 +32,7 @@ public class SpotifyController {
     }
 
     @GetMapping("/api/spotify/search") // ?type={type}&word={word} 과 같이 받아야함.
-    public ResponseEntity<String> getSearchAlbum(@RequestParam String type, @RequestParam String word) {
+    public ResponseEntity<String> getSearchAlbum(@RequestParam String type, @RequestParam String word) throws JsonProcessingException {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(spotifySearchService.typeSearch(spotifyTokenService.getAccessToken(), type, word));
