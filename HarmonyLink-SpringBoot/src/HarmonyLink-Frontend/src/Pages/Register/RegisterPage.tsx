@@ -1,11 +1,10 @@
 import styled from "styled-components";
-import './RegisterPage.css'
+import "./RegisterPage.css";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Input from "../../components/Input/Input";
-import ButtonGroup from "react-bootstrap/ButtonGroup";
-import ToggleButton from "react-bootstrap/ToggleButton";
+import ToggleButtonGroup from "../../components/Button/ToggleButtonGroup";
 
 const Body = styled.div`
   height: 100%;
@@ -13,7 +12,7 @@ const Body = styled.div`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  margin:40px;
+  margin: 40px;
 `;
 
 const MbtiArea = styled.div`
@@ -23,7 +22,7 @@ const MbtiArea = styled.div`
 `;
 
 const MbtiBtnArea = styled.div`
-margin: 20px;
+  margin: 20px;
 `;
 
 const RegisterPage: React.FC = () => {
@@ -104,105 +103,45 @@ const RegisterPage: React.FC = () => {
         <p>MBTI</p>
         <MbtiArea>
           <MbtiBtnArea>
-            <ButtonGroup className="custom-button-group">
-              <ToggleButton className="custom-toggle-button"
-                id="radio-e"
-                type="radio"
-                variant="secondary"
-                name="radioEI"
-                value="E"
-                checked={radioValueEI === "E"} // 'E'가 현재 선택된 값인지 확인
-                onChange={(e) => setRadioValueEI(e.currentTarget.value)} // 값 변경 시 radioValue 업데이트
-              >
-                E
-              </ToggleButton>
-              <ToggleButton className="custom-toggle-button"
-                id="radio-i"
-                type="radio"
-                variant="secondary"
-                name="radioEI"
-                value="I"
-                checked={radioValueEI === "I"} 
-                onChange={(e) => setRadioValueEI(e.currentTarget.value)} // 값 변경 시 radioValue 업데이트
-              >
-                I
-              </ToggleButton>
-            </ButtonGroup>
-            <ButtonGroup className="custom-button-group">
-              <ToggleButton className="custom-toggle-button"
-                id="radio-s"
-                type="radio"
-                variant="secondary"
-                name="radioSN"
-                value="S"
-                checked={radioValueSN === "S"} 
-                onChange={(e) => setRadioValueSN(e.currentTarget.value)}
-              >
-                S
-              </ToggleButton>
-              <ToggleButton className="custom-toggle-button"
-                id="radio-n"
-                type="radio"
-                variant="secondary"
-                name="radioSN"
-                value="N"
-                checked={radioValueSN === "N"} 
-                onChange={(e) => setRadioValueSN(e.currentTarget.value)}
-              >
-                N
-              </ToggleButton>
-            </ButtonGroup>
-            <ButtonGroup className="custom-button-group">
-              <ToggleButton className="custom-toggle-button"
-                id="radio-t"
-                type="radio"
-                variant="secondary"
-                name="radioTF"
-                value="T"
-                checked={radioValueTF === "T"} 
-                onChange={(e) => setRadioValueTF(e.currentTarget.value)}
-              >
-                T
-              </ToggleButton>
-              <ToggleButton className="custom-toggle-button"
-                id="radio-f"
-                type="radio"
-                variant="secondary"
-                name="radioTF"
-                value="F"
-                checked={radioValueTF === "F"} 
-                onChange={(e) => setRadioValueTF(e.currentTarget.value)}
-              >
-                F
-              </ToggleButton>
-            </ButtonGroup>
-            <ButtonGroup className="custom-button-group">
-              <ToggleButton className="custom-toggle-button"
-                id="radio-j"
-                type="radio"
-                variant="secondary"
-                name="radioJP"
-                value="J"
-                checked={radioValueJP === "J"} 
-                onChange={(e) => setRadioValueJP(e.currentTarget.value)}
-              >
-                J
-              </ToggleButton>
-              <ToggleButton className="custom-toggle-button"
-                id="radio-p"
-                type="radio"
-                variant="secondary"
-                name="radioJP"
-                value="P"
-                checked={radioValueJP === "P"}
-                onChange={(e) => setRadioValueJP(e.currentTarget.value)}
-              >
-                P
-              </ToggleButton>
-            </ButtonGroup>
+            <ToggleButtonGroup
+              options={[
+                { label: "E", value: "E" },
+                { label: "I", value: "I" },
+              ]}
+              name="radioEI"
+              value={radioValueEI}
+              onChange={setRadioValueEI}
+            />
+            <ToggleButtonGroup
+              options={[
+                { label: "S", value: "S" },
+                { label: "N", value: "N" },
+              ]}
+              name="radioSN"
+              value={radioValueSN}
+              onChange={setRadioValueSN}
+            />
+            <ToggleButtonGroup
+              options={[
+                { label: "T", value: "T" },
+                { label: "F", value: "F" },
+              ]}
+              name="radioTF"
+              value={radioValueTF}
+              onChange={setRadioValueTF}
+            />
+            <ToggleButtonGroup
+              options={[
+                { label: "J", value: "J" },
+                { label: "P", value: "P" },
+              ]}
+              name="radioJP"
+              value={radioValueJP}
+              onChange={setRadioValueJP}
+            />
           </MbtiBtnArea>
-          
         </MbtiArea>
+
         <button onClick={handleRegister}>회원가입하기</button>
         <p>{registerMassege}</p>
       </Body>

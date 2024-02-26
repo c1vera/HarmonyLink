@@ -41,7 +41,7 @@ public class PostApiController {
 
     /** 필터된 게시글 리스트 제공용. /user/postList로 글 목록 잘 연동되는지 테스트 후에, 해당 URL 형식으로 변경해주세요. */
     @GetMapping("/user/postListFiltered/{mbtiParam}")
-    public ResponseEntity<List<ArticlePostDTO>> getFilteredList(@PathVariable String mbti) {
+    public ResponseEntity<List<ArticlePostDTO>> getFilteredList(@PathVariable("mbtiParam") String mbti) {
         List<ArticlePostDTO> list = postService.getFilteredList(mbti);
 
         return ResponseEntity.status(HttpStatus.OK).body(list);
