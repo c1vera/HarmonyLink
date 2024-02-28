@@ -8,6 +8,10 @@ import com.dongyang.HarmonyLink.MVC.domain.User.DTO.UserDTO;
 import com.dongyang.HarmonyLink.MVC.domain.User.Entity.UserEntity;
 import com.dongyang.HarmonyLink.Manager.SessionManager;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,10 +43,12 @@ public class PostService {
     }
 
     /** 특정 필터링의 게시글 목록 반환 */
-    public List<ArticlePostDTO> getFilteredList(String mbti) {
-
-        return postRepository.findByInputMbti(mbti).stream()
-                .map(i -> ArticlePostDTO.toDTO(i)).toList();
+    public Page<ArticlePostDTO> getFilteredList(String mbti,
+                                                @PageableDefault(size = 10, sort = "createdDate", direction = Sort.Direction.DESC)Pageable pageable) {
+        // pageableDefault는 나중에 변경하기.
+        return postRepository.findByInputMbti(mbti, pageable)
+                .map(i -> ArticlePostDTO.toDTO(i));
+        // Page<>는 stream과 비슷하게 .map() 기능 제공.
     }
 
     /** '모든' 게시글 반환(필터링 X) */

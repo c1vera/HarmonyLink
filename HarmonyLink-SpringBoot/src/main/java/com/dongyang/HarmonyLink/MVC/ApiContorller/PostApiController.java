@@ -7,6 +7,8 @@ import com.dongyang.HarmonyLink.MVC.domain.User.DTO.UserDTO;
 import com.dongyang.HarmonyLink.Manager.SessionManager;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,14 +43,21 @@ public class PostApiController {
 
     /** 필터된 게시글 리스트 제공용. /user/postList로 글 목록 잘 연동되는지 테스트 후에, 해당 URL 형식으로 변경해주세요. */
     @GetMapping("/user/postListFiltered/{mbtiParam}")
+    public ResponseEntity<Page<ArticlePostDTO>> getFilteredList(@PathVariable("mbtiParam") String mbti, Pageable pageable) {
+        Page<ArticlePostDTO> list = postService.getFilteredList(mbti, pageable);
+
+        return ResponseEntity.status(HttpStatus.OK).body(list);
+    }
+    /*
+    * @GetMapping("/user/postListFiltered/{mbtiParam}")
     public ResponseEntity<List<ArticlePostDTO>> getFilteredList(@PathVariable("mbtiParam") String mbti) {
         List<ArticlePostDTO> list = postService.getFilteredList(mbti);
 
         return ResponseEntity.status(HttpStatus.OK).body(list);
-    }
+    }*/
 
 
-    /** 모든 게시글 제공용. 필터링 기능이 고려되지 않음. */
+    /** 모든 게시글 제공용. 필터링 기능이 고려되지 않음. - 사용 안함. */
     @GetMapping("/user/postList")
     public ResponseEntity<List<ArticlePostDTO>> getList() {
         List<ArticlePostDTO> list = postService.getAllArticle();

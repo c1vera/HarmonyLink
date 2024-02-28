@@ -34,10 +34,11 @@ public class SpotifySearchService {
 
 
     /**
-     * GET 요청쿼리에서 설정한 type대로 검색을 수행. (일단 track으로 고정하여 test 진행중)
+     * GET 요청쿼리에서 설정한 track, artist 중 특정 type대로 검색을 수행.
      */
     public String typeSearch(String accessToken, String type, String name) throws JsonProcessingException {
 
+        /* #1 . Spotify search api 요청을 통한 값 받아오기 */
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json"); // json으로 받을 것.
         headers.add("Authorization", "Bearer " + accessToken); // 엑세스 토큰 필수.
@@ -46,7 +47,7 @@ public class SpotifySearchService {
 
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(baseSearchingURL)
                 .queryParam("q", name)
-                .queryParam("type", "track");
+                .queryParam("type", type); // track or artist
 
 
         ResponseEntity<String> response = restTemplate.exchange(
@@ -58,11 +59,7 @@ public class SpotifySearchService {
         // ResponseEntity<String> response = restTemplate.getForEntity(Url, String.class)
         // getForEntity를 통한 Http 통신은 header 포함 기능이 없으므로, 엑세스 토큰이 필요한 Spotify api요청에는 적합 X
 
-        
-        //  ============================
-        // 받아온 json을 재조립하는 코드 작성하기
-        //  ============================
-
+        /* #2 . 받아온 response를 특정 값만 골라 json으로 재조립하기 */
         JsonNode jsonNode = objectMapper.readTree(response.getBody());
 
         ObjectNode objectNode = objectMapper.createObjectNode();
@@ -70,6 +67,8 @@ public class SpotifySearchService {
 
 
         ArrayNode items = (ArrayNode) jsonNode.path("tracks").path("items");
+        // JsonNode가 []  띄고 있는 경우 ArrayNode로 형변환 가능
+
         for (int i = 0; i < items.size(); i++) {
             JsonNode trackInfo = items.get(i);
 

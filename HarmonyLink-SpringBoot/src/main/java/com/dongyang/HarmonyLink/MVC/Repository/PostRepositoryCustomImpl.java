@@ -3,7 +3,12 @@ package com.dongyang.HarmonyLink.MVC.Repository;
 import com.dongyang.HarmonyLink.MVC.domain.Article.Entity.ArticleEntity;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -14,28 +19,38 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
 
 
     @Override
-    public List<ArticleEntity> findByInputMbti(String mbti) {
+    public Page<ArticleEntity> findByInputMbti(String mbti, Pageable pageable) {
+        String query = "select m from ArticleEntity m where m.type like :expression";
+        String countQuery = "select count(a) from ArticleEntity a where a.type = :mbti";
 
-        StringBuilder inputMbti = new StringBuilder();
-
+        List<ArticleEntity> mbtiArticleList = null;
         // 제공된 mbti 타입이 이미 완성형인 경우.
         if(!mbti.contains("X")) {
-            return em.createQuery("select m from ArticleEntity m where m.type = :mbti", ArticleEntity.class)
+            // "select m from ArticleEntity m where m.type = :mbti"
+            mbtiArticleList = em.createQuery("select m from ArticleEntity m where m.type like :mbti", ArticleEntity.class)
                     .setParameter("mbti", mbti)
+                    .setFirstResult((int) pageable.getOffset())
+                    .setMaxResults(pageable.getPageSize())
+                    .getResultList();
+        }
+        else {
+            mbti = mbti.replace('X', '_');
+            mbtiArticleList = em.createQuery(query, ArticleEntity.class) // 어떤 클래스로 제네릭 사용하는지 명시하기.
+                    .setParameter("expression", mbti)
                     .getResultList();
         }
 
-        // X가 설정되어있는 경우
-        for(int i = 0; i < mbti.length(); i++) {
-            if(!mbti.contains("X")) break; // 현재 mbti에 "X" 없으면 정지.
+        if(mbtiArticleList == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "쿼리 요청이 정상동작하지 않음");
 
-            if(mbti.charAt(i) == 'X') inputMbti.append("_");
-            else inputMbti.append(mbti.charAt(i));
+        long total = em.createQuery(countQuery, Long.class)
+                .setParameter("mbti", mbti)
+                .getSingleResult();
 
-        }
 
-        return em.createQuery("select m from ArticleEntity m where m.type like :expression", ArticleEntity.class) // 어떤 클래스로 제네릭 사용하는지 명시하기.
-                .setParameter("expression", inputMbti.toString())
-                .getResultList();
+
+        return new PageImpl<>(mbtiArticleList, pageable, total);
+
+
+
     }
 }
