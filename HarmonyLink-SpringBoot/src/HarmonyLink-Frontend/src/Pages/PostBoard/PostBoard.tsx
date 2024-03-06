@@ -35,9 +35,13 @@ interface Post {
   type: string;
 }
 
+interface PostList {
+  content: Post[];
+}
+
 const PostBoard: React.FC = () => {
   // 상태의 타입을 Post 배열로 설정
-  const [postList, setPostList] = useState<Post[]>([]);
+  const [postList, setPostList] = useState<PostList | null>(null);
   const navigate = useNavigate();
 
   const [radioValueEI, setRadioValueEI] = useState("X1");
@@ -61,7 +65,7 @@ const PostBoard: React.FC = () => {
     fetchPostList();
   }, []); // 빈 의존성 배열을 전달하여 컴포넌트 마운트 시에만 fetchPostList가 호출
 
-  const handleOpenPost = async (postKey) => {
+  const handleOpenPost = async (postKey: number) => {
     try {
       const response = await axios.get(
         `http://localhost:8080/api/v1/user/post/${postKey}`
@@ -75,10 +79,10 @@ const PostBoard: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const EI = radioValueEI.replace("X1", "X")
-      const SN = radioValueSN.replace("X2", "X")
-      const TF = radioValueTF.replace("X3", "X")
-      const JP = radioValueJP.replace("X4", "X")
+      const EI = radioValueEI.replace("X1", "X");
+      const SN = radioValueSN.replace("X2", "X");
+      const TF = radioValueTF.replace("X3", "X");
+      const JP = radioValueJP.replace("X4", "X");
       // 모든 상태 값을 조합하여 최종 MBTI 값을 생성
       const mbtiVal = `${EI}${SN}${TF}${JP}`;
 
@@ -97,7 +101,6 @@ const PostBoard: React.FC = () => {
 
     fetchData();
   }, [radioValueEI, radioValueSN, radioValueTF, radioValueJP]);
-
   return (
     <div className="MainPage">
       <Body>
@@ -161,7 +164,7 @@ const PostBoard: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {postList.map((post) => (
+          {postList?.content?.map((post: Post) => (
               <tr
                 key={post.post_key}
                 onClick={() => handleOpenPost(post.post_key)}

@@ -17,7 +17,7 @@ const App: React.FC = () => {
       <SideBar />
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route path="/postboard" element={<PostBoard />} />
+        <Route path="/postboard" element={<PostBoard key={Date.now()}/>} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/test" element={<Test />} />
