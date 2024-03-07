@@ -43,9 +43,8 @@ public class PostService {
     }
 
     /** 특정 필터링의 게시글 목록 반환 */
-    public Page<ArticlePostDTO> getFilteredList(String mbti,
-                                                @PageableDefault(size = 10, sort = "createdDate", direction = Sort.Direction.DESC)Pageable pageable) {
-        // pageableDefault는 나중에 변경하기.
+    public Page<ArticlePostDTO> getFilteredList(String mbti, Pageable pageable) {
+
         return postRepository.findByInputMbti(mbti, pageable)
                 .map(i -> ArticlePostDTO.toDTO(i));
         // Page<>는 stream과 비슷하게 .map() 기능 제공.

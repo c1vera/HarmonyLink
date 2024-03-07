@@ -63,34 +63,99 @@ public class SpotifySearchService {
         JsonNode jsonNode = objectMapper.readTree(response.getBody());
 
         ObjectNode objectNode = objectMapper.createObjectNode();
-        ArrayNode arrayNode = objectNode.putArray("tracks"); // arrayNode는 미리 추가해놔도 됨..?
 
+        // 검색 결과의 값이 없는 경우, 어떤 값을 return할 것인가?
+        if(jsonNode.isEmpty()) return "검색 결과가 없습니다.";
 
-        ArrayNode items = (ArrayNode) jsonNode.path("tracks").path("items");
-        // JsonNode가 []  띄고 있는 경우 ArrayNode로 형변환 가능
+        if(type.equals("track")) {
+            ArrayNode arrayNode = objectNode.putArray("tracks"); // arrayNode는 미리 추가해놔도 됨..?
 
-        for (int i = 0; i < items.size(); i++) {
-            JsonNode trackInfo = items.get(i);
+            ArrayNode items = (ArrayNode) jsonNode.path("tracks").path("items");
+            // JsonNode가 []  띄고 있는 경우 ArrayNode로 형변환 가능
 
-            if (trackInfo != null) { // trackInfo가 null이 아닌 경우에만 처리
-                ObjectNode jsonTemp = objectMapper.createObjectNode();
+            for (int i = 0; i < items.size(); i++) {
+                JsonNode trackInfo = items.get(i);
 
-                // trackName과 artistName 추출하기
-                String trackName = trackInfo.path("name").asText("null");
-                JsonNode artists = trackInfo.path("artists");
-                String artistName = "null";
-                if (artists.isArray() && artists.size() > 0) {
-                    artistName = artists.get(0).path("name").asText("null");
-                }
+                if (trackInfo != null) { // trackInfo가 null이 아닌 경우에만 처리
+                    ObjectNode jsonTemp = objectMapper.createObjectNode();
 
-                // JsonNode -> ObjectNode
-                jsonTemp.put("trackName", trackName);
-                jsonTemp.put("artistName", artistName);
+                    // trackName과 artistName 추출하기
+                    String trackName = trackInfo.path("name").asText("null");
+                    JsonNode artists = trackInfo.path("artists");
+                    String artistName = "null";
+                    if (artists.isArray() && artists.size() > 0) {
+                        artistName = artists.get(0).path("name").asText("null");
+                    }
 
-                arrayNode.add(jsonTemp);
+                    // JsonNode -> ObjectNode
+                    jsonTemp.put("trackName", trackName);
+                    jsonTemp.put("artistName", artistName);
+
+                    // artist 이미지 가져오기
+                    JsonNode trackImageNode = trackInfo.path("album").path("images").get(0);
+
+                    if(trackImageNode != null) {
+                        String imgUri =
+                                trackImageNode.path("url").asText("");
+                        int imgWidth =
+                                trackImageNode.path("height").asInt(100);
+                        int imgHeight =
+                                trackImageNode.path("width").asInt(100);
+
+                        jsonTemp.put("imgUri", imgUri);
+                        jsonTemp.put("imgWidth", imgWidth);
+                        jsonTemp.put("imgHeight", imgHeight);
+
+                    }
+
+                    arrayNode.add(jsonTemp);
+                } else log.info("몬가 잘못됨..");
             }
+        }
 
-            else log.info("몬가 잘못됨..");
+        if(type.equals("artist")) {
+            ArrayNode arrayNode = objectNode.putArray("artist"); // arrayNode는 미리 추가해놔도 됨..?
+
+
+            ArrayNode items = (ArrayNode) jsonNode.path("artists").path("items");
+            // JsonNode가 []  띄고 있는 경우 ArrayNode로 형변환 가능
+
+            for (int i = 0; i < items.size(); i++) {
+                JsonNode artistInfo = items.get(i);
+
+                if (artistInfo != null) { // trackInfo가 null이 아닌 경우에만 처리
+                    ObjectNode jsonTemp = objectMapper.createObjectNode();
+
+                    // artistName 추출
+                    String artistName = artistInfo.path("name").asText("null");
+
+                    ArrayNode genreArrNode = jsonTemp.putArray("genreArrNode");
+                    for(JsonNode genre : artistInfo.path("genres")) genreArrNode.add(genre);
+
+
+                    // JsonNode -> ObjectNode
+                    jsonTemp.put("artistName", artistName);
+
+                    // artist 이미지 가져오기
+                    JsonNode artistImageNode = artistInfo.path("images").get(0);
+
+                    if(artistImageNode != null) {
+                        String imgUri =
+                                artistImageNode.path("url").asText("");
+                        int imgWidth =
+                                artistImageNode.path("height").asInt(100);
+                        int imgHeight =
+                                artistImageNode.path("width").asInt(100);
+
+                        jsonTemp.put("imgUri", imgUri);
+                        jsonTemp.put("imgWidth", imgWidth);
+                        jsonTemp.put("imgHeight", imgHeight);
+
+                    }
+
+                    arrayNode.add(jsonTemp);
+                } else log.info("몬가 잘못됨..");
+            }
         }
 
 
