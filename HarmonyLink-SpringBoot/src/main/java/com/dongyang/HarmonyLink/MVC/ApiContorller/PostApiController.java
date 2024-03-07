@@ -43,7 +43,7 @@ public class PostApiController {
         return ResponseEntity.status(HttpStatus.OK).body(article);
     }
 
-    /** 필터된 게시글 리스트 제공용. /user/postList로 글 목록 잘 연동되는지 테스트 후에, 해당 URL 형식으로 변경해주세요. */
+    /** 필터된 게시글 리스트 제공용. 요청 시, get parameter로 page, size를 작성하여 페이징 기능 구현 가능합니다. */
     @GetMapping("/user/postListFiltered/{mbtiParam}")
     public ResponseEntity<Page<ArticlePostDTO>> getFilteredList(@PathVariable("mbtiParam") String mbti,
                                                                 @PageableDefault(size = 1, sort = "createdDate", direction = Sort.Direction.DESC)Pageable pageable) {
@@ -84,9 +84,17 @@ public class PostApiController {
         return ResponseEntity.status(HttpStatus.OK).body(resultDTO);
     }
 
+    /** 게시글 수정하기 */
+    @PatchMapping("/user/article")
+    public ResponseEntity<ArticlePostDTO> patchArticle(HttpServletRequest request,
+                                                       @RequestBody ArticlePostDTO dto) {
 
-    //@PatchMapping("/user/article")
+        UserDTO user = loginService.getAuthUser(request);
 
+        ArticlePostDTO resultDTO = postService.patchArticle(user, dto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(resultDTO);
+    }
 
     /** 사용자가 삭제하는 경우 */
     //@DeleteMapping("/user/article")

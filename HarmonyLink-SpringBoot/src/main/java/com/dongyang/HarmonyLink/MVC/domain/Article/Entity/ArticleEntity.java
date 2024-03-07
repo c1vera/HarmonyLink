@@ -72,4 +72,13 @@ public class ArticleEntity extends BaseTimeEntity {
                 null,
                 userEntity);
     }
+
+    /** 사용자가 게시글을 수정함에 따라 변경되는 값들을 업데이트 */
+    public void patchEntity(ArticleEntity newArticle) {
+        if(newArticle.title != null) this.title = newArticle.getTitle();
+        this.view = newArticle.getView(); // int는 기본값 0이므로 null 없음
+        if(newArticle.content != null) this.content = newArticle.getContent();
+        if(newArticle.music_key != null) this.music_key = newArticle.getMusic_key();
+        this.thumbsUp = newArticle.getThumbsUp(); // int는 기본값 0이므로 null 없음
+    }
 }
