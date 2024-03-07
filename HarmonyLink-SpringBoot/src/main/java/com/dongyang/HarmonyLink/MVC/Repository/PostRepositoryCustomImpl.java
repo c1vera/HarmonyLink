@@ -37,6 +37,8 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
             mbti = mbti.replace('X', '_');
             mbtiArticleList = em.createQuery(query, ArticleEntity.class) // 어떤 클래스로 제네릭 사용하는지 명시하기.
                     .setParameter("expression", mbti)
+                    .setFirstResult((int) pageable.getOffset())
+                    .setMaxResults(pageable.getPageSize())
                     .getResultList();
         }
 
@@ -49,8 +51,5 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
 
 
         return new PageImpl<>(mbtiArticleList, pageable, total);
-
-
-
     }
 }
