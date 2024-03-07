@@ -105,8 +105,8 @@ const RegisterPage: React.FC = () => {
           <MbtiBtnArea>
             <ToggleButtonGroup
               options={[
-                { label: "E", value: "E" },
-                { label: "I", value: "I" },
+                { label: "E", value: "E", key: "E" },
+                { label: "I", value: "I", key: "I"  },
               ]}
               name="radioEI"
               value={radioValueEI}
@@ -114,8 +114,8 @@ const RegisterPage: React.FC = () => {
             />
             <ToggleButtonGroup
               options={[
-                { label: "S", value: "S" },
-                { label: "N", value: "N" },
+                { label: "S", value: "S", key: "S" },
+                { label: "N", value: "N", key: "N" },
               ]}
               name="radioSN"
               value={radioValueSN}
@@ -123,8 +123,8 @@ const RegisterPage: React.FC = () => {
             />
             <ToggleButtonGroup
               options={[
-                { label: "T", value: "T" },
-                { label: "F", value: "F" },
+                { label: "T", value: "T" , key: "T" },
+                { label: "F", value: "F", key: "F" },
               ]}
               name="radioTF"
               value={radioValueTF}
@@ -132,8 +132,8 @@ const RegisterPage: React.FC = () => {
             />
             <ToggleButtonGroup
               options={[
-                { label: "J", value: "J" },
-                { label: "P", value: "P" },
+                { label: "J", value: "J", key: "J" },
+                { label: "P", value: "P" , key: "J" },
               ]}
               name="radioJP"
               value={radioValueJP}
