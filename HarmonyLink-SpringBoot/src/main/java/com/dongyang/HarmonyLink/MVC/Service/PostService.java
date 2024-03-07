@@ -68,20 +68,34 @@ public class PostService {
 
     
     /** 게시글 수정 */
+    @Transactional
     public ArticlePostDTO patchArticle(UserDTO user, ArticlePostDTO dto) {
-        UserEntity patchUser = UserEntity.toEntity(user);
+        UserEntity loginUser = UserEntity.toEntity(user);
 
         ArticleEntity target = postRepository.findById(dto.getPost_key())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 게시글 존재하지 않음"));
 
-        if(target.getUser().getUserKey() != patchUser.getUserKey())
+        if(target.getUser().getUserKey() != loginUser.getUserKey())
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "수정자는 게시글을 작성한 인원이 아님");
 
         // 값 수정
-        target.patchEntity(ArticleEntity.toEntity(dto, patchUser));
+        target.patchEntity(ArticleEntity.toEntity(dto, loginUser));
 
         ArticleEntity result = postRepository.save(target);
 
         return ArticlePostDTO.toDTO(result);
+    }
+
+    @Transactional
+    public ArticlePostDTO deleteArticle(UserDTO user, ArticlePostDTO dto) {
+        ArticleEntity target = postRepository.findById(dto.getPost_key())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 게시글 존재하지 않음"));
+
+        if(target.getUser().getUserKey() != user.getUserKey())
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "삭제 희망자는 게시글을 작성한 인원이 아님.");
+
+        postRepository.delete(target);
+
+        return ArticlePostDTO.toDTO(target);
     }
 }

@@ -97,7 +97,16 @@ public class PostApiController {
     }
 
     /** 사용자가 삭제하는 경우 */
-    //@DeleteMapping("/user/article")
+    @DeleteMapping("/user/article")
+    public ResponseEntity<ArticlePostDTO> deleteArticle(HttpServletRequest request,
+                                                        @RequestBody ArticlePostDTO dto) {
+
+        UserDTO user = loginService.getAuthUser(request);
+
+        ArticlePostDTO resultDTO = postService.deleteArticle(user, dto);
+
+        return ResponseEntity.status(HttpStatus.OK).body(resultDTO);
+    }
 
 
     /** 관리자가 삭제하는 경우 */
