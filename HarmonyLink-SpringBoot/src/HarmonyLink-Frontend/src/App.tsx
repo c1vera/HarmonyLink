@@ -10,7 +10,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import PrivateRoute from "./PrivateRoute";
 import Test from "./Pages/Spotify/Test"
 import PostDetailPage from "./Pages/PostDetail/PostDetailPage";
-
+import Search from "./Pages/Spotify/Search";
 const App: React.FC = () => {
   return (
     <div className="App">
@@ -30,6 +30,7 @@ const App: React.FC = () => {
           }
         />
         <Route path="/detail/:id" element={<PostDetailPage />} />
+        <Route path="/search" element={<Search />} />
       </Routes>
     </div>
   );
