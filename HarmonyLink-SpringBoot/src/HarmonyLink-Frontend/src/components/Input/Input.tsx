@@ -9,11 +9,11 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 const InputEach = styled.input<InputProps>`
   font-size: ${(props) => (props.fontSize ? props.fontSize : "20px")};
-  padding: 15px;
+  padding: 10px;
   margin: 10px;
   width: ${(props) => (props.width ? props.width : "700px")};
-  border-radius: 15px;
-  border: 2.5px solid #a986ff;
+  border-radius: 12px;
+  border: 2.5px solid #bebebe;
 `;
 
 const Input = ({ width, fontSize, ...props }: InputProps) => {
