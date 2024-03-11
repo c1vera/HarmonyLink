@@ -1,11 +1,12 @@
 import styled from "styled-components";
-import Input from "../../components/Input/Input";
+import Input from "../../components/Input";
 import TextArea from "../../components/Textarea/Textarea";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { AppState } from "../../redux/store";
+import Modal from "../../components/Modal";
 
 const Body = styled.div`
   height: 100%;
@@ -19,22 +20,22 @@ const Body = styled.div`
 const TitleMusicArea = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  align-items: center; /* 또는 flex-start, flex-end 사용 */
+  align-items: center;
 `;
 
 const MbtiArea = styled.div`
   display: flex;
   flex-grow: 0;
-  align-items: center; /* 또는 flex-start, flex-end 사용 */
+  align-items: center;
   > * {
     /* 직계 자식 요소만 선택 */
-    margin: 0px 30px; /* 예시 마진 값 */
+    margin: 0px 30px;
   }
 `;
 const MusicArea = styled.div`
   display: flex;
   flex-grow: 0;
-  align-items: center; /* 또는 flex-start, flex-end 사용 */
+  align-items: center;
   > * {
     /* 직계 자식 요소만 선택 */
     margin: 0px 30px; /* 예시 마진 값 */
@@ -54,7 +55,7 @@ const WritePage: React.FC = () => {
       const result = await axios.post("http://localhost:8080/api/v1/user/requestPost", {
         title: title,
         content: content,
-        type: userInfo.mbti,
+        type: userInfo?.mbti,
       }, { withCredentials: true });
   
       console.log(result.data);
@@ -73,11 +74,15 @@ const WritePage: React.FC = () => {
         <TitleMusicArea>
           <MbtiArea>
             <h4>게시판</h4>
-            <p>{userInfo.mbti} 게시판</p>
+            <p>{userInfo?.mbti} 게시판</p>
           </MbtiArea>
 
           <MusicArea>
-            <button>노래 선택하기</button>
+            <Modal buttonName={"노래 선택하기"} modalTitle={"노래 검색"}>
+              <form>
+                <Input width={"500px"}></Input>
+              </form>
+            </Modal>
             <p>{music}</p>
           </MusicArea>
         </TitleMusicArea>

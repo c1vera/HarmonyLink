@@ -12,6 +12,8 @@ interface ModalProps extends React.InputHTMLAttributes<HTMLInputElement> {
 const ModalArea = styled.div`
   font-family: "omyu_pretty";
   font-size: x-large;
+  text-align:center;
+  align-items: center;
 `;
 
 const CustomModal: React.FC<ModalProps> = ({

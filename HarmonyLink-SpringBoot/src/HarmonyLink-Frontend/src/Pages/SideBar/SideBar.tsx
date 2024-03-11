@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import "./SideBar.css";
 import UserView from "./SideFooter";
+import Title from "../../components/Text";
 
 const Body = styled.div`
   height: 100%;
@@ -17,6 +18,7 @@ const Logo = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  text-shadow: 5px 5px 4px rgba(154, 154, 154, 0.559);
 `;
 
 const Content = styled.div`
@@ -33,7 +35,7 @@ function SideBar() {
       <Body>
         <Logo>
           <Link to="/">
-            <h2>HarmonyLink</h2>
+            <Title text={"HarmonyLink"} color={"#a986ff"}/>
           </Link>
         </Logo>
         <Content><Link to="/postboard">
