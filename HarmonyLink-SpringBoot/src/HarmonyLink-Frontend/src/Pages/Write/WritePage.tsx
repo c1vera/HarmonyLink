@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Input from "../../components/Input";
 import TextArea from "../../components/Textarea/Textarea";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -73,7 +73,10 @@ const WritePage: React.FC = () => {
   const [selectMusic, setSelectMusic] = useState<Music | null>(null);
   const [modalShow, setModalShow] = useState(false);
 
-  const handleClose = () => setModalShow(false);
+  const handleClose = () => {
+    setMusicList(null);
+    setModalShow(false);
+  }
   const handleShow = () => setModalShow(true);
 
   const handlePost = async () => {

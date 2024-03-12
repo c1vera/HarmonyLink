@@ -5,6 +5,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   width?: string;
   fontSize?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onKeyPress? : (event: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const InputEach = styled.input<InputProps>`
