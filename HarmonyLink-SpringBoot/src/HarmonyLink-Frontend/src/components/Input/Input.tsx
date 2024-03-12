@@ -12,8 +12,8 @@ const InputEach = styled.input<InputProps>`
   padding: 10px;
   margin: 10px;
   width: ${(props) => (props.width ? props.width : "700px")};
-  border-radius: 12px;
-  border: 2.5px solid #bebebe;
+  border-radius: 10px;
+  border: 2px solid #bebebe;
 `;
 
 const Input = ({ width, fontSize, ...props }: InputProps) => {
