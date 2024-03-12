@@ -1,7 +1,8 @@
 .SideBar {
   flex: 1; 
-  background-color: #a986ff;
-  color:white;
+  background-color: #ffffff;
+  color:#000000;
+  box-shadow: 5px 5px 20px rgba(97, 97, 97, 0.559);
 }
 
 .SideBar a, .SideBar a:visited {
