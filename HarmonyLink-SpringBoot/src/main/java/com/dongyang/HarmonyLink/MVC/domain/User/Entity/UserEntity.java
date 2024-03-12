@@ -50,5 +50,10 @@ public class UserEntity extends BaseTimeEntity {
                 dto.getMbti()
         );
 
-    } 
+    }
+
+    // Spring Security - BCryptEncoder를 통해 입력되어온 비밀번호를 암호화하여 저장하는 함수.
+    public void encodePw(String bCryptedPw) {
+        this.pw = bCryptedPw;
+    }
 }

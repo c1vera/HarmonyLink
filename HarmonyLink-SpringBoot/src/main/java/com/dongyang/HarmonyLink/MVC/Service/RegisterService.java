@@ -19,6 +19,8 @@ public class RegisterService {
         this.userRepository = userRepository;
     }
 
+
+    /** 회원가입한 회원의 정보 불러오기 */
     public UserDTO getInfo(String id) {
         UserEntity entity = userRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지 않는 회원입니다."));
@@ -26,6 +28,7 @@ public class RegisterService {
         return UserDTO.toDTO(entity);
     }
 
+    /** 회원가입 수행 */
     @Transactional
     public UserDTO register(UserDTO dto) {
 
@@ -46,7 +49,8 @@ public class RegisterService {
         registerRepository.findByNickname(dto.getNickname());
         */
     }
-
+    
+    /** 회원정보 수정 */
     @Transactional
     public UserDTO patchUser(UserDTO dto) {
         if(userRepository.findByUserKey(dto.getUserKey()).isEmpty())
@@ -57,6 +61,7 @@ public class RegisterService {
         return UserDTO.toDTO(result);
     }
 
+    /** 회원 삭제/탈퇴 */
     @Transactional
     public void deleteUser(UserDTO dto) {
         if(userRepository.findByUserKey(dto.getUserKey()).isEmpty())
