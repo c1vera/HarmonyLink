@@ -1,6 +1,7 @@
 package com.dongyang.HarmonyLink.MVC.domain.Article.DTO;
 
 import com.dongyang.HarmonyLink.MVC.domain.Article.Entity.ArticleEntity;
+import com.dongyang.HarmonyLink.MVC.domain.Article.Entity.TrackEntity;
 import com.dongyang.HarmonyLink.MVC.domain.User.Entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +10,7 @@ import lombok.ToString;
 
 /**
  * 용도 :
- * 일반 사용자를 위한
- * 게시글의 '등록', '수정' 등 의 게시글 상호작용에 사용.
+ * 프론트엔드에서 게시글 작성 시 전달되는 article, track에 대한 모든 정보를 가져오는 DTO
  * */
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,24 +23,33 @@ public class ArticlePostDTO {
     private String type; // 어떤 MBTI 게시판의 글인지 확인
     private int view; // 조회수 기능
     private String content;
-    private String music_key; // api에서 어떻게 받아오느냐에 따라 자료형 변경 예정.
     private int thumbsUp;
+
+    private String trackName;
+    private String artistName;
+    private String imgUri;
+
 
     /* user의 정보 부분 */
     private Long userKey; // 사용자의 DB Key 저장하여, 1:M 관계 수용(?)
+    private Long spotifyKey; // spotify에서 저장하는 키값을 기준으로 노래를 저장하기
     private String nickname; // 사용자 이름
 
-    public static ArticlePostDTO toDTO(ArticleEntity entity) {
+    /* 추후 빌더로만 사용하기 */
+    public static ArticlePostDTO toDTO(ArticleEntity articleEntity) {
         return new ArticlePostDTO(
-                entity.getPost_key(),
-                entity.getTitle(),
-                entity.getType(),
-                entity.getView(),
-                entity.getContent(),
-                entity.getMusic_key(),
-                entity.getThumbsUp(),
-                entity.getUser().getUserKey(),
-                entity.getUser().getNickname()
+                articleEntity.getPost_key(),
+                articleEntity.getTitle(),
+                articleEntity.getType(),
+                articleEntity.getView(),
+                articleEntity.getContent(),
+                articleEntity.getThumbsUp(),
+                null,
+                null,
+                null,
+                articleEntity.getUser().getUserKey(),
+                articleEntity.getTrack().getSpotifyKey(),
+                articleEntity.getUser().getNickname()
         );
     }
 

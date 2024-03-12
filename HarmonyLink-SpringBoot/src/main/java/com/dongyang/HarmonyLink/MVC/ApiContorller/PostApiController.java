@@ -2,9 +2,12 @@ package com.dongyang.HarmonyLink.MVC.ApiContorller;
 
 import com.dongyang.HarmonyLink.MVC.Service.LoginService;
 import com.dongyang.HarmonyLink.MVC.Service.PostService;
+import com.dongyang.HarmonyLink.MVC.Service.TrackService;
 import com.dongyang.HarmonyLink.MVC.domain.Article.DTO.ArticlePostDTO;
+import com.dongyang.HarmonyLink.MVC.domain.Article.DTO.PostDTO;
+import com.dongyang.HarmonyLink.MVC.domain.Article.DTO.TrackDTO;
 import com.dongyang.HarmonyLink.MVC.domain.User.DTO.UserDTO;
-import com.dongyang.HarmonyLink.Manager.SessionManager;
+import com.dongyang.HarmonyLink.Manager.MapperManager.BuildDTOManager;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -14,8 +17,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -27,10 +28,12 @@ public class PostApiController {
 
     private PostService postService;
     private LoginService loginService;
+    private TrackService trackService;
 
-    public PostApiController(PostService postService, LoginService loginService) {
+    public PostApiController(PostService postService, LoginService loginService, TrackService trackService) {
         this.postService = postService;
         this.loginService = loginService;
+        this.trackService = trackService;
     }
 
 
@@ -77,9 +80,20 @@ public class PostApiController {
     public ResponseEntity<ArticlePostDTO> postArticle(HttpServletRequest request,
                                             @RequestBody ArticlePostDTO dto) {
         UserDTO user = loginService.getAuthUser(request);
-        // ResponseStatusException은, 예외와 동시에 Http 상태 코드를 발생 가능. 사용하기 유용할 듯??
 
-        ArticlePostDTO resultDTO = postService.postArticle(user, dto);
+        PostDTO devidePostDTO = BuildDTOManager.buildPostDTO(dto);
+        TrackDTO devideTrackDTO = BuildDTOManager.buildTrackDTO(dto);
+
+        /* 현재 사용자가 게시글에 작성하고자 하는 track이 본 서비스 DB에 존재하는지 확인하고, 없으면 삽입 */
+        // postDTO의 field 값 일부를 추출하여 TrackDTO로 만들기
+        
+        // 만든 DTO 활용하여 트랙 유무 확인, 없으면 삽입하고 아니면 존재하는 값 가져오기
+        TrackDTO trackDTO = trackService.inputTrack(devideTrackDTO);
+
+
+        /* Article 삽입하기 */
+        // 가져온 track 값 포함하여 저장하기
+        ArticlePostDTO resultDTO = postService.postArticle(user, devidePostDTO, trackDTO);
 
         return ResponseEntity.status(HttpStatus.OK).body(resultDTO);
     }
@@ -91,7 +105,12 @@ public class PostApiController {
 
         UserDTO user = loginService.getAuthUser(request);
 
-        ArticlePostDTO resultDTO = postService.patchArticle(user, dto);
+        /* 현재 사용자가 게시글에 작성하고자 하는 track이 본 서비스 DB에 존재하는지 확인하고, 없으면 삽입 */
+
+        TrackDTO devideTrackDTO = BuildDTOManager.buildTrackDTO(dto);
+        TrackDTO trackDTO = trackService.inputTrack(devideTrackDTO);
+
+        ArticlePostDTO resultDTO = postService.patchArticle(user, dto, trackDTO);
 
         return ResponseEntity.status(HttpStatus.OK).body(resultDTO);
     }
@@ -103,7 +122,10 @@ public class PostApiController {
 
         UserDTO user = loginService.getAuthUser(request);
 
-        ArticlePostDTO resultDTO = postService.deleteArticle(user, dto);
+        PostDTO devidePostDTO = BuildDTOManager.buildPostDTO(dto);
+
+        ArticlePostDTO resultDTO = postService.deleteArticle(user, devidePostDTO);
+        // track은 DB에 그대로 저장되어있어도 상관없음!!!
 
         return ResponseEntity.status(HttpStatus.OK).body(resultDTO);
     }

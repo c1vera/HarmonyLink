@@ -3,9 +3,13 @@ package com.dongyang.HarmonyLink.MVC.Service;
 import com.dongyang.HarmonyLink.MVC.Repository.PostRepository;
 import com.dongyang.HarmonyLink.MVC.domain.Article.DTO.ArticleDTO;
 import com.dongyang.HarmonyLink.MVC.domain.Article.DTO.ArticlePostDTO;
+import com.dongyang.HarmonyLink.MVC.domain.Article.DTO.PostDTO;
+import com.dongyang.HarmonyLink.MVC.domain.Article.DTO.TrackDTO;
 import com.dongyang.HarmonyLink.MVC.domain.Article.Entity.ArticleEntity;
+import com.dongyang.HarmonyLink.MVC.domain.Article.Entity.TrackEntity;
 import com.dongyang.HarmonyLink.MVC.domain.User.DTO.UserDTO;
 import com.dongyang.HarmonyLink.MVC.domain.User.Entity.UserEntity;
+import com.dongyang.HarmonyLink.Manager.MapperManager.BuildEntityManager;
 import com.dongyang.HarmonyLink.Manager.SessionManager;
 
 import org.springframework.data.domain.Page;
@@ -58,10 +62,11 @@ public class PostService {
 
     /** 게시글 작성 */
     @Transactional
-    public ArticlePostDTO postArticle(UserDTO user, ArticlePostDTO dto) {
+    public ArticlePostDTO postArticle(UserDTO user, PostDTO dto, TrackDTO trackDTO) {
         UserEntity writeUser = UserEntity.toEntity(user);
 
-        ArticleEntity result = postRepository.save(ArticleEntity.toEntity(dto, writeUser));
+        // ArticleEntity result = postRepository.save(ArticleEntity.toEntity(dto, writeUser, savedTrack));
+        ArticleEntity result = postRepository.save(BuildEntityManager.buildArticleEntity(writeUser, dto, trackDTO));
 
         return ArticlePostDTO.toDTO(result);
     }
@@ -69,8 +74,9 @@ public class PostService {
     
     /** 게시글 수정 */
     @Transactional
-    public ArticlePostDTO patchArticle(UserDTO user, ArticlePostDTO dto) {
+    public ArticlePostDTO patchArticle(UserDTO user, ArticlePostDTO dto, TrackDTO trackDTO) {
         UserEntity loginUser = UserEntity.toEntity(user);
+        TrackEntity savedTrack = TrackEntity.toEntity(trackDTO);
 
         ArticleEntity target = postRepository.findById(dto.getPost_key())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 게시글 존재하지 않음"));
@@ -78,8 +84,8 @@ public class PostService {
         if(target.getUser().getUserKey() != loginUser.getUserKey())
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "수정자는 게시글을 작성한 인원이 아님");
 
-        // 값 수정
-        target.patchEntity(ArticleEntity.toEntity(dto, loginUser));
+        // 값 수정 -> track DTO 및 Entity 관련 기능 작성 완료 이후 추후 수정
+        // target.patchEntity(ArticleEntity.toEntity(dto, loginUser, savedTrack)),savedTrack);
 
         ArticleEntity result = postRepository.save(target);
 
@@ -87,7 +93,7 @@ public class PostService {
     }
 
     @Transactional
-    public ArticlePostDTO deleteArticle(UserDTO user, ArticlePostDTO dto) {
+    public ArticlePostDTO deleteArticle(UserDTO user, PostDTO dto) {
         ArticleEntity target = postRepository.findById(dto.getPost_key())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 게시글 존재하지 않음"));
 

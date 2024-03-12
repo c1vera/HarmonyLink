@@ -9,14 +9,18 @@ import java.time.LocalDateTime;
 
 /**
  * 용도 :
- * 관리자 기능 상에서의
- * 삭제 일자 및 사유까지 확인하는, 사용을 위한 DTO
+ * Article과 Track의 값을 동시에 받아오기 위한 상위 DTO
  * */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @ToString
 public class ArticleDTO {
+    private ArticlePostDTO postDTO;
+    private TrackDTO trackDTO;
+
+
+    /*
     private Long post_key;
     private String title;
     private String type; // 어떤 MBTI 게시판의 글인지 확인
@@ -28,7 +32,6 @@ public class ArticleDTO {
     private LocalDateTime deletedDate;
     private String whyDeleted;
 
-
-    /* Foreign Key */
     private Long userKey;
+    /* Foreign Key */
 }

@@ -19,7 +19,7 @@ public class LoginApiController {
 
     /*
     * LoginApi는 Controller,Service, Repository 외에 아래와 같은 추가적인 요소를 사용합니다.
-    * Manager.ExeptionManager : 각 오류 객체 만드는데 사용
+    * Manager.ExeptionManager : 각 오류 객체 만드는데 사용 => 아직까지 사용 X
     *
     * */
 
