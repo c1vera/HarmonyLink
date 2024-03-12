@@ -49,21 +49,34 @@ const PostBoard: React.FC = () => {
   const [radioValueTF, setRadioValueTF] = useState("X3");
   const [radioValueJP, setRadioValueJP] = useState("X4");
 
+  const [postNumber, setPostNumber] = useState(null);
+  const [selectPostNumber, setSelectPostNumber] = useState<number>(1);
+  const handleChange = (value: string | number) => {
+    setSelectPostNumber(Number(value));
+  };
+  
+  const optionNumber = postNumber ? Math.ceil(postNumber / 10) : 0;
+  const options = [];
+
+  for (let i = 1; i <= optionNumber; i++) {
+    options.push({ label: `${i}`, value: `${i}`, key: `${i}` });
+  }
+
   useEffect(() => {
     const fetchPostList = async () => {
       try {
         const response = await axios.get(
           "http://localhost:8080/api/v1/user/postList"
         );
-        setPostList(response.data); // 데이터를 받아서 상태를 업데이트
         console.log("전체 글목록", response.data);
+        setPostNumber(response.data.length);
       } catch (error) {
-        console.error("글목록을 불러오지 못했어요", error);
+        console.error("전체 글목록을 불러오지 못했어요", error);
       }
     };
 
     fetchPostList();
-  }, []); // 빈 의존성 배열을 전달하여 컴포넌트 마운트 시에만 fetchPostList가 호출
+  }, []);
 
   const handleOpenPost = async (postKey: number) => {
     try {
@@ -90,7 +103,13 @@ const PostBoard: React.FC = () => {
 
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/v1/user/postListFiltered/${mbtiVal}`
+          `http://localhost:8080/api/v1/user/postListFiltered/${mbtiVal}`,
+          {
+            params: {
+              page: selectPostNumber-1,
+              size: 10,
+            },
+          }
         );
         setPostList(response.data);
         console.log(mbtiVal, "필터된 글목록", response.data);
@@ -100,7 +119,8 @@ const PostBoard: React.FC = () => {
     };
 
     fetchData();
-  }, [radioValueEI, radioValueSN, radioValueTF, radioValueJP]);
+  }, [radioValueEI, radioValueSN, radioValueTF, radioValueJP, selectPostNumber]);
+
   return (
     <div className="MainPage">
       <Body>
@@ -164,7 +184,7 @@ const PostBoard: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-          {postList?.content?.map((post: Post) => (
+            {postList?.content?.map((post: Post) => (
               <tr
                 key={post.post_key}
                 onClick={() => handleOpenPost(post.post_key)}
@@ -179,6 +199,12 @@ const PostBoard: React.FC = () => {
             ))}
           </tbody>
         </Table>
+        <ToggleButtonGroup
+          options={options}
+          name="radioEI"
+          value={selectPostNumber}
+          onChange={handleChange}
+        />
       </Body>
     </div>
   );
