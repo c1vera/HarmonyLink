@@ -1,12 +1,15 @@
 import styled from "styled-components";
 import Input from "../../components/Input";
 import TextArea from "../../components/Textarea/Textarea";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { AppState } from "../../redux/store";
 import Modal from "../../components/Modal";
+import ToggleButtonGroup from "../../components/Button/ToggleButtonGroup";
+import Button from "react-bootstrap/Button";
+import Table from "react-bootstrap/Table";
 
 const Body = styled.div`
   height: 100%;
@@ -14,7 +17,7 @@ const Body = styled.div`
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding:40px;
+  padding: 40px;
 `;
 
 const TitleMusicArea = styled.div`
@@ -38,26 +41,56 @@ const MusicArea = styled.div`
   align-items: center;
   > * {
     /* 직계 자식 요소만 선택 */
-    margin: 0px 30px; /* 예시 마진 값 */
+    margin: 0px 30px;
   }
 `;
+
+const MusicTbody = styled.tbody`
+  height: 600px;
+  overflow-y: auto;
+  display: block;
+  width: 90%;
+`;
+interface Music {
+  trackName: string;
+  artistName: string;
+  imgUri: string;
+}
+interface MusicList {
+  tracks: Music[];
+}
 
 const WritePage: React.FC = () => {
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [postMessage, setPostMessage] = useState<string>("");
-  const [music, setMusic] = useState<string>("노래제목");
   const navigate = useNavigate();
   const userInfo = useSelector((state: AppState) => state.user.userInfo);
 
+  const [searchType, setSearchType] = useState<string>("track");
+  const [searchValue, setSearchValue] = useState<string>("");
+  const [musicList, setMusicList] = useState<MusicList | null>(null);
+  const [selectMusic, setSelectMusic] = useState<Music | null>(null);
+  const [modalShow, setModalShow] = useState(false);
+
+  const handleClose = () => setModalShow(false);
+  const handleShow = () => setModalShow(true);
+
   const handlePost = async () => {
     try {
-      const result = await axios.post("http://localhost:8080/api/v1/user/requestPost", {
-        title: title,
-        content: content,
-        type: userInfo?.mbti,
-      }, { withCredentials: true });
-  
+      const result = await axios.post(
+        "http://localhost:8080/api/v1/user/requestPost",
+        {
+          title: title,
+          content: content,
+          type: userInfo?.mbti,
+          trackName: selectMusic?.trackName,
+          artistName: selectMusic?.artistName,
+          imgUri: selectMusic?.imgUri,
+        },
+        { withCredentials: true }
+      );
+
       console.log(result.data);
       navigate("/"); // 성공 시 글목록으로 리다이렉트
     } catch (error) {
@@ -65,7 +98,26 @@ const WritePage: React.FC = () => {
       setPostMessage("글쓰기에 문제가 발생했어요.");
     }
   };
-  
+
+  // 노래 검색 로직
+  const fetchMusicSearch = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/api/spotify/search",
+        {
+          params: {
+            type: searchType,
+            word: searchValue,
+          },
+        }
+      );
+      setMusicList(response.data);
+      console.log("검색 정보", response.data);
+      console.log(musicList);
+    } catch (error) {
+      console.error("검색 에러", error);
+    }
+  };
 
   return (
     <div className="MainPage">
@@ -78,12 +130,65 @@ const WritePage: React.FC = () => {
           </MbtiArea>
 
           <MusicArea>
-            <Modal buttonName={"노래 선택하기"} modalTitle={"노래 검색"}>
+            <Button variant="secondary" onClick={handleShow}>
+              노래 선택하기
+            </Button>
+            <Modal
+              show={modalShow}
+              onClose={handleClose}
+              modalTitle="노래 검색"
+            >
               <form>
-                <Input width={"500px"}></Input>
+                <ToggleButtonGroup
+                  options={[
+                    { label: "Track", value: "track", key: "track" },
+                    { label: "Artist", value: "artist", key: "artist" },
+                  ]}
+                  name="radioEI"
+                  value={searchType}
+                  onChange={setSearchType}
+                />
+                <Input
+                  width="300px"
+                  onChange={(e) => {
+                    setSearchValue(e.target.value);
+                  }}
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter") {
+                      fetchMusicSearch();
+                    }
+                  }}
+                />
+                <Button variant="secondary" onClick={fetchMusicSearch}>
+                  검색하기
+                </Button>
+
+                <Table bordered hover>
+                  <MusicTbody>
+                    {musicList?.tracks?.map((music, index) => (
+                      <tr
+                        key={index}
+                        onClick={() => {
+                          setSelectMusic(music);
+                          handleClose();
+                        }}
+                      >
+                        <td>
+                          <img
+                            src={music.imgUri}
+                            alt="Album Cover"
+                            style={{ width: "50px", height: "50px" }}
+                          />
+                        </td>
+                        <td>{music.trackName}</td>
+                        <td>{music.artistName}</td>
+                      </tr>
+                    ))}
+                  </MusicTbody>
+                </Table>
               </form>
             </Modal>
-            <p>{music}</p>
+            <p>{selectMusic?.trackName}</p>
           </MusicArea>
         </TitleMusicArea>
 
