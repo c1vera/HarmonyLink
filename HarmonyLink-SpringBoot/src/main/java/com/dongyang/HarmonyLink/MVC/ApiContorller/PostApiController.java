@@ -49,7 +49,7 @@ public class PostApiController {
     /** 필터된 게시글 리스트 제공용. 요청 시, get parameter로 page, size를 작성하여 페이징 기능 구현 가능합니다. */
     @GetMapping("/user/postListFiltered/{mbtiParam}")
     public ResponseEntity<Page<ArticlePostDTO>> getFilteredList(@PathVariable("mbtiParam") String mbti,
-                                                                @PageableDefault(size = 1, sort = "createdDate", direction = Sort.Direction.DESC)Pageable pageable) {
+                                                                Pageable pageable) {
         // pageableDefault는 나중에 변경하기.
 
         Page<ArticlePostDTO> list = postService.getFilteredList(mbti, pageable);
