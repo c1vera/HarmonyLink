@@ -33,6 +33,9 @@ interface Post {
   thumbsUp: number;
   music_key: string | null;
   type: string;
+  view: number;
+  trackName: string | null;
+  imgUri: string | null;
 }
 
 interface PostList {
@@ -49,18 +52,96 @@ const PostBoard: React.FC = () => {
   const [radioValueTF, setRadioValueTF] = useState("X3");
   const [radioValueJP, setRadioValueJP] = useState("X4");
 
-  const [postNumber, setPostNumber] = useState(null);
-  const [selectPostNumber, setSelectPostNumber] = useState<number>(1);
-  const handleChange = (value: string | number) => {
-    setSelectPostNumber(Number(value));
+  // 총 게시글 개수
+  const [totalCount, setTotalCount] = useState(null);
+
+  // 선택된 페이지
+  const [currentPage, setCurrentPage] = useState<string>("1");
+  const handleChange = (value: string) => {
+    setCurrentPage(value);
   };
-  
-  const optionNumber = postNumber ? Math.ceil(postNumber / 10) : 0;
+
+  // 총 페이지 수
+  const optionNumber = totalCount ? Math.ceil(totalCount / 10) : 0;
   const options = [];
 
-  for (let i = 1; i <= optionNumber; i++) {
-    options.push({ label: `${i}`, value: `${i}`, key: `${i}` });
+  const showPageCnt = 5;
+
+ if (optionNumber){
+  if (Number(currentPage) <= showPageCnt-2) {
+    // 선택된 페이지가 3보다 작을때
+    if (optionNumber < showPageCnt) {
+      for (let i = 1; i <= optionNumber; i++) {
+        options.push({ label: `${i}`, value: `${i}`, key: `${i}` });
+      }
+    } else {
+      for (let i = 1; i <= showPageCnt; i++) {
+        options.push({ label: `${i}`, value: `${i}`, key: `${i}` });
+      }
+      options.push({
+        label: ">",
+        value: `${Number(currentPage) + 10}`,
+        key: `${Number(currentPage) + 10}`,
+      });
+      options.push({
+        label: ">>",
+        value: `${optionNumber}`,
+        key: `${optionNumber}`,
+      });
+    }
   }
+  else if (Number(currentPage) + 2 >= optionNumber) {
+    // 선택된 페이지 + 2가 전체 페이지수보다
+    options.push({
+      label: "<<",
+      value: '1',
+      key: '1',
+    });
+    options.push({
+      label: "<",
+      value: `${Number(currentPage) - 10}`,
+      key: `${Number(currentPage) - 10}`,
+    });
+    for (let i = optionNumber - 4; i <= optionNumber; i++) {
+      options.push({ label: `${i}`, value: `${i}`, key: `${i}` });
+    }
+  }
+   else if (Number(currentPage) > showPageCnt - 2) {
+    // 선택된 페이지가 5보다 클때
+    options.push({
+      label: "<<",
+      value: '1',
+      key: '1',
+    });
+    options.push({
+      
+      label: "<",
+      value: `${Number(currentPage) - 10}`,
+      key: `${Number(currentPage) - 10}`,
+    });
+    
+    for (let i = Number(currentPage) - 2; i <= Number(currentPage) + 2; i++) {
+      options.push({ label: `${i}`, value: `${i}`, key: `${i}` });
+    }
+
+    options.push({
+      label: ">",
+      value: `${Number(currentPage) + 10}`,
+      key: `${Number(currentPage) + 10}`,
+    });
+    options.push({
+      label: ">>",
+      value: `${optionNumber}`,
+      key: `${optionNumber}`,
+    });
+  }
+  
+  if (Number(currentPage) < 0) {
+    setCurrentPage('1');
+  } else if (Number(currentPage) > optionNumber)
+  setCurrentPage(optionNumber.toString());
+ }
+  
 
   useEffect(() => {
     const fetchPostList = async () => {
@@ -69,7 +150,7 @@ const PostBoard: React.FC = () => {
           "http://localhost:8080/api/v1/user/postList"
         );
         console.log("전체 글목록", response.data);
-        setPostNumber(response.data.length);
+        setTotalCount(response.data.length);
       } catch (error) {
         console.error("전체 글목록을 불러오지 못했어요", error);
       }
@@ -106,12 +187,13 @@ const PostBoard: React.FC = () => {
           `http://localhost:8080/api/v1/user/postListFiltered/${mbtiVal}`,
           {
             params: {
-              page: selectPostNumber-1,
+              page: Number(currentPage) - 1,
               size: 10,
             },
           }
         );
         setPostList(response.data);
+        setTotalCount(response.data.totalElements);
         console.log(mbtiVal, "필터된 글목록", response.data);
       } catch (error) {
         console.error("요청 중 오류 발생:", error);
@@ -119,8 +201,12 @@ const PostBoard: React.FC = () => {
     };
 
     fetchData();
-  }, [radioValueEI, radioValueSN, radioValueTF, radioValueJP, selectPostNumber]);
+  }, [radioValueEI, radioValueSN, radioValueTF, radioValueJP, currentPage]);
 
+  useEffect(() => {
+    setCurrentPage('1');
+  }, [radioValueEI, radioValueSN, radioValueTF, radioValueJP]);
+  
   return (
     <div className="MainPage">
       <Body>
@@ -175,11 +261,13 @@ const PostBoard: React.FC = () => {
         <Table bordered hover>
           <thead>
             <tr>
-              <th>글번호</th>
-              <th>게시판</th>
-              <th>제목</th>
-              <th>작성자</th>
-              <th>노래 제목</th>
+              <th>Number</th>
+              <th>MBTI</th>
+              <th>Title</th>
+              <th>User</th>
+              <th>Music</th>
+              <th>Img</th>
+              <th>View</th>
               <th>💜</th>
             </tr>
           </thead>
@@ -193,7 +281,9 @@ const PostBoard: React.FC = () => {
                 <td>{post.type}</td>
                 <td>{post.title}</td>
                 <td>{post.nickname}</td>
-                <td>{post.music_key || "없음"}</td>
+                <td>{post.trackName || "없음"}</td>
+                <td>{post.imgUri}</td>
+                <td>{post.view}</td>
                 <td>{post.thumbsUp}</td>
               </tr>
             ))}
@@ -201,8 +291,8 @@ const PostBoard: React.FC = () => {
         </Table>
         <ToggleButtonGroup
           options={options}
-          name="radioEI"
-          value={selectPostNumber}
+          name="page"
+          value={currentPage}
           onChange={handleChange}
         />
       </Body>
