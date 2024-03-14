@@ -32,6 +32,7 @@ textarea{
 
 .App > .MainPage {
   flex: 4;
+  background-color: rgb(232, 232, 232);
 }
 
 .App > .SideBar, .App > .MainPage {

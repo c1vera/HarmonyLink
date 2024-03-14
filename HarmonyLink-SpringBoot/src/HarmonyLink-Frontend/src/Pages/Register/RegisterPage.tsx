@@ -5,15 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Input from "../../components/Input/Input";
 import ToggleButtonGroup from "../../components/Button/ToggleButtonGroup";
-
-const Body = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  margin: 40px;
-`;
+import * as S from "../../style/GlobalStyles"
 
 const MbtiArea = styled.div`
   display: flex;
@@ -62,7 +54,7 @@ const RegisterPage: React.FC = () => {
 
   return (
     <div className="MainPage">
-      <Body>
+      <S.Body>
         <h3>회원가입</h3>
         <p>아이디</p>
         <Input
@@ -144,7 +136,7 @@ const RegisterPage: React.FC = () => {
 
         <button onClick={handleRegister}>회원가입하기</button>
         <p>{registerMassege}</p>
-      </Body>
+      </S.Body>
     </div>
   );
 };

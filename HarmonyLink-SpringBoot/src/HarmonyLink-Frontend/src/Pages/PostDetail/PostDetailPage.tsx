@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import * as S from "../../style/GlobalStyles"
 
 const Top = styled.div`
   text-align: left;
@@ -8,12 +9,6 @@ const Top = styled.div`
   flex: 1;
 `;
 
-const Body = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 40px;
-`;
 
 const Content = styled.div`
   text-align: center;
@@ -30,7 +25,7 @@ const PostDetailPage = () => {
 
   return (
     <div className="MainPage">
-      <Body>
+      <S.Body>
         <Top>
           <h3>{post?.type} 게시판</h3>
           <h4>{post?.music_key}</h4>
@@ -43,7 +38,7 @@ const PostDetailPage = () => {
         <Footer>
           <p>💜 {post?.thumbsUp}</p>
         </Footer>
-      </Body>
+      </S.Body>
     </div>
   );
 };

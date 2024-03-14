@@ -11,6 +11,7 @@ const Body = styled.div`
   justify-content: center;
   align-items: center;
   text-align: center;
+
 `;
 
 const Logo = styled.div`
@@ -31,6 +32,7 @@ const Content = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  
 `;
 
 function SideBar() {

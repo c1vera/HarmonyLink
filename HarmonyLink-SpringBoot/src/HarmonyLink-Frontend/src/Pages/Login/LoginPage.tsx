@@ -7,14 +7,7 @@ import Input from '../../components/Input/Input';
 import { useDispatch } from "react-redux";
 import { loginUser } from '../../redux/actions/userActions';
 import { AppDispatch } from '../../redux/store';
-
-const Body = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-`;
+import * as S from "../../style/GlobalStyles"
 
 const LoginMessage = styled.p`
   color: red;
@@ -66,11 +59,9 @@ const LoginPage: React.FC = () => {
       });
   };
 
-  
-
   return (
     <div className="MainPage">
-      <Body>
+      <S.Body>
         <h3>로그인</h3>
         <p>아이디</p>
         <Input
@@ -88,7 +79,7 @@ const LoginPage: React.FC = () => {
         ></Input>
         <LoginMessage>{loginMessage}</LoginMessage>
         <button onClick={handleLogin}>로그인하기</button>
-      </Body>
+      </S.Body>
     </div>
   );
 };

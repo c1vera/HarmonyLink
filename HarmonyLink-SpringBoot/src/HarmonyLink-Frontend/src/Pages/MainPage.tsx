@@ -1,21 +1,13 @@
 import styled from "styled-components";
 import "./MainPage.css";
-
-const Body = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 40px;
-`;
+import * as S from "../style/GlobalStyles"
 
 const MainPage: React.FC = () => {
   return (
     <div className="MainPage">
-      <Body>
+      <S.Body>
         <p>메인입니다</p>
-      </Body>
+      </S.Body>
     </div>
   );
 };

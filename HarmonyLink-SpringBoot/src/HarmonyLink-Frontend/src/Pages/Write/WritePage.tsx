@@ -10,15 +10,7 @@ import Modal from "../../components/Modal";
 import ToggleButtonGroup from "../../components/Button/ToggleButtonGroup";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
-
-const Body = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 40px;
-`;
+import * as S from "../../style/GlobalStyles"
 
 const TitleMusicArea = styled.div`
   display: grid;
@@ -124,7 +116,7 @@ const WritePage: React.FC = () => {
 
   return (
     <div className="MainPage">
-      <Body>
+      <S.Body>
         <h3>다른 사람들에게 노래를 추천해봐요 😀</h3>
         <TitleMusicArea>
           <MbtiArea>
@@ -210,7 +202,7 @@ const WritePage: React.FC = () => {
         ></TextArea>
         <button onClick={handlePost}>글 작성하기</button>
         <p>{postMessage}</p>
-      </Body>
+      </S.Body>
     </div>
   );
 };

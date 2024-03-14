@@ -4,15 +4,7 @@ import Table from "react-bootstrap/Table";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import ToggleButtonGroup from "../../components/Button/ToggleButtonGroup";
-
-const Body = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 40px;
-`;
+import * as S from "../../style/GlobalStyles"
 
 const MbtiArea = styled.div`
   display: flex;
@@ -209,7 +201,7 @@ const PostBoard: React.FC = () => {
   
   return (
     <div className="MainPage">
-      <Body>
+      <S.Body>
         <h2>글목록</h2>
 
         <p>MBTI</p>
@@ -295,7 +287,7 @@ const PostBoard: React.FC = () => {
           value={currentPage}
           onChange={handleChange}
         />
-      </Body>
+      </S.Body>
     </div>
   );
 };
