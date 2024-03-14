@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Input from "../../components/Input/Input";
 import ToggleButtonGroup from "../../components/Button/ToggleButtonGroup";
 import * as S from "../../style/GlobalStyles"
+import Button from "../../components/Button";
 
 const MbtiArea = styled.div`
   display: flex;
@@ -134,7 +135,7 @@ const RegisterPage: React.FC = () => {
           </MbtiBtnArea>
         </MbtiArea>
 
-        <button onClick={handleRegister}>회원가입하기</button>
+        <Button size={'medium'} theme={'default'} onClick={ handleRegister }>회원가입하기</Button>
         <p>{registerMassege}</p>
       </S.Body>
     </div>

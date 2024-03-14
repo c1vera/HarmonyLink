@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import { loginUser } from '../../redux/actions/userActions';
 import { AppDispatch } from '../../redux/store';
 import * as S from "../../style/GlobalStyles"
+import Button from "../../components/Button";
 
 const LoginMessage = styled.p`
   color: red;
@@ -78,7 +79,7 @@ const LoginPage: React.FC = () => {
           }}
         ></Input>
         <LoginMessage>{loginMessage}</LoginMessage>
-        <button onClick={handleLogin}>로그인하기</button>
+        <Button size={'medium'} theme={'default'} onClick={ handleLogin }>로그인하기</Button>
       </S.Body>
     </div>
   );

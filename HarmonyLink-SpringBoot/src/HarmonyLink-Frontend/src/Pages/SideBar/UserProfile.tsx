@@ -4,8 +4,8 @@ import { AppState, AppDispatch, persistor } from "../../redux/store";
 import { logoutUser } from "../../redux/actions/userActions";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
-const UserProfile: React.FC = () => {
+import Button from "../../components/Button";
+const UserProfile = () => {
   const userInfo = useSelector((state: AppState) => state.user.userInfo);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -31,16 +31,43 @@ const UserProfile: React.FC = () => {
       .catch((error) => {
         // 에러 처리
         console.error("Logout failed:", error);
-      });
-
+        if (error.response && error.response.status === 401) {
+          // 401 에러 처리 로직
+          console.error('Session expired. User needs to login again.');
       
+          // 로그아웃 상태로 전환
+          dispatch(logoutUser());
+      
+          // 세션 스토리지에서 사용자 정보 제거
+          sessionStorage.removeItem('user');
+      
+          // 쿠키 삭제
+          document.cookie = 'session_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      
+          // persistor 상태 제거
+          persistor.purge().then(() => {
+            console.log('Session expired. Persisted state has been removed.');
+          });
+      
+          // 사용자를 로그인 페이지로 리디렉트
+          navigate("/login");
+        }
+      
+        // 오류를 다음으로 전달
+        return Promise.reject(error);
+      });
+          
   };
 
   if (!userInfo) {
     return (
       <>
-        <Link to="/login">로그인</Link>
-        <Link to="/register">회원가입</Link>
+        <Link to="/login">
+        <Button size={'small'} theme={'default'} >로그인</Button>
+        </Link>
+        <Link to="/register">
+        <Button size={'small'} theme={'default'} onClick={handleLogout}>회원가입</Button>
+        </Link>
       </>
     );
   }
@@ -48,9 +75,10 @@ const UserProfile: React.FC = () => {
   return (
     <div>
       
-      <br />
+      
       {userInfo.nickname}님, 반갑습니다!{" "}
-      <button onClick={handleLogout}>로그아웃</button>
+      <br />
+      <Button size={'small'} theme={'default'} onClick={handleLogout}>로그아웃</Button>
     </div>
   );
 };

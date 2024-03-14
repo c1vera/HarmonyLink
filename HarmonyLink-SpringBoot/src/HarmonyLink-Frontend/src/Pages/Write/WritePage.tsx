@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { AppState } from "../../redux/store";
 import Modal from "../../components/Modal";
 import ToggleButtonGroup from "../../components/Button/ToggleButtonGroup";
-import Button from "react-bootstrap/Button";
+import Button from "../../components/Button";
 import Table from "react-bootstrap/Table";
 import * as S from "../../style/GlobalStyles"
 
@@ -125,7 +125,7 @@ const WritePage: React.FC = () => {
           </MbtiArea>
 
           <MusicArea>
-            <Button variant="secondary" onClick={handleShow}>
+            <Button size={'small'} theme={'default'} onClick={handleShow}>
               노래 선택하기
             </Button>
             <Modal
@@ -200,7 +200,8 @@ const WritePage: React.FC = () => {
             setContent(e.target.value);
           }}
         ></TextArea>
-        <button onClick={handlePost}>글 작성하기</button>
+        <br/>
+        <Button size={'medium'} theme={ 'default' } onClick={handlePost}>글 작성하기</Button>
         <p>{postMessage}</p>
       </S.Body>
     </div>
