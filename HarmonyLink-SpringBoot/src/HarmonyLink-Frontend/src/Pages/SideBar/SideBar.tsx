@@ -18,9 +18,13 @@ const Logo = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-top: 30px;
   text-shadow: 5px 5px 4px rgba(154, 154, 154, 0.559);
 `;
 
+const MainImg = styled.img`
+  width: 60%;
+`;
 const Content = styled.div`
   align-items: center;
   flex: 5;
@@ -35,13 +39,19 @@ function SideBar() {
       <Body>
         <Logo>
           <Link to="/">
-            <Title text={"HarmonyLink"} color={"#a986ff"}/>
+            <MainImg
+              className="phoneImage"
+              alt="iPhone_01"
+              src="img/logo.png"
+            />
           </Link>
         </Logo>
-        <Content><Link to="/postboard">
+        <Content>
+          <Link to="/postboard">
             <h3>글목록</h3>
-          </Link></Content>
-        <UserView/>
+          </Link>
+        </Content>
+        <UserView />
       </Body>
     </div>
   );
