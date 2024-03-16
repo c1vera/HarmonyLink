@@ -12,8 +12,7 @@ import lombok.*;
 @Builder
 public class TrackEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // spotify key로 변경 시 제거
-    private Long spotifyKey;
+    private String spotifyKey;
 
     @Column
     private String name;

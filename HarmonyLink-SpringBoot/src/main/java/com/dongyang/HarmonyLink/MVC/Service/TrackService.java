@@ -3,6 +3,7 @@ package com.dongyang.HarmonyLink.MVC.Service;
 import com.dongyang.HarmonyLink.MVC.Repository.TrackRepository;
 import com.dongyang.HarmonyLink.MVC.domain.Article.DTO.TrackDTO;
 import com.dongyang.HarmonyLink.MVC.domain.Article.Entity.TrackEntity;
+import com.dongyang.HarmonyLink.Manager.MapperManager.BuildDTOManager;
 import com.dongyang.HarmonyLink.Manager.MapperManager.BuildEntityManager;
 import jakarta.persistence.PersistenceException;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,9 @@ public class TrackService {
         this.trackRepository = trackRepository;
     }
 
+    /** 게시글의 '작성' 시에만 사용되는 함수.
+     * 게시글에 포함된 track이 존재하면 이를 반환하고, 없으면 저장한 후에 반환한다.
+     * */
     public TrackDTO inputTrack(TrackDTO track) {
             TrackEntity trackEntity = null;
         try{
@@ -36,6 +40,14 @@ public class TrackService {
 
         if(trackEntity == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "");
 
-        return TrackDTO.toDTO(trackEntity);
+        return BuildDTOManager.toTrackDTO(trackEntity);
     }
+
+
+    public TrackDTO getTrackBySpotifyKey(String SpotifyKey) {
+        TrackEntity trackEntity = trackRepository.findBySpotifyKey(SpotifyKey);
+
+        return BuildDTOManager.toTrackDTO(trackEntity);
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.dongyang.HarmonyLink.MVC.Repository;
 
 import com.dongyang.HarmonyLink.MVC.domain.Article.Entity.ArticleEntity;
+import com.dongyang.HarmonyLink.MVC.domain.Article.Entity.TrackEntity;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,7 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
 
 
     @Override
-    public Page<ArticleEntity> findByInputMbti(String mbti, Pageable pageable) {
+    public List<ArticleEntity> findByInputMbti(String mbti, Pageable pageable) {
         String query = "select m from ArticleEntity m where m.type like :mbti order by createdDate DESC";
         String countQuery = "select count(a) from ArticleEntity a where a.type like :mbti";
 
@@ -42,6 +43,8 @@ public class PostRepositoryCustomImpl implements PostRepositoryCustom {
         log.info("total 개수 : " + total);
 
 
-        return new PageImpl<>(mbtiArticleList, pageable, total);
+
+
+        return mbtiArticleList;
     }
 }

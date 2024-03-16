@@ -47,6 +47,7 @@ interface Music {
   trackName: string;
   artistName: string;
   imgUri: string;
+  spotifyKey: string;
 }
 interface MusicList {
   tracks: Music[];
@@ -82,6 +83,7 @@ const WritePage: React.FC = () => {
           trackName: selectMusic?.trackName,
           artistName: selectMusic?.artistName,
           imgUri: selectMusic?.imgUri,
+          spotifyKey: selectMusic?.spotifyKey
         },
         { withCredentials: true }
       );

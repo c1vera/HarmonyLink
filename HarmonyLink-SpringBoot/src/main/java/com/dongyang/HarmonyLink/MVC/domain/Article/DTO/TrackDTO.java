@@ -16,7 +16,7 @@ public class TrackDTO {
     private String trackImgUri;
 
     // Article Foreign Key, Many To One
-    private Long spotifyKey;
+    private String spotifyKey;
 
     public static TrackDTO toDTO(TrackEntity trackEntity) {
         return new TrackDTO(

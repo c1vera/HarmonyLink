@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface TrackRepository extends JpaRepository<TrackEntity, String> {
 
     /* track이 지니는 spotifyKey를 기준으로 찾기 */
-    public TrackEntity findBySpotifyKey(Long spotifyKey);
+    public TrackEntity findBySpotifyKey(String spotifyKey);
 }

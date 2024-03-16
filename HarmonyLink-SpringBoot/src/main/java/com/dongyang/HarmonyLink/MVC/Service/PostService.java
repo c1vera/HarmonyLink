@@ -1,7 +1,6 @@
 package com.dongyang.HarmonyLink.MVC.Service;
 
 import com.dongyang.HarmonyLink.MVC.Repository.PostRepository;
-import com.dongyang.HarmonyLink.MVC.domain.Article.DTO.ArticleDTO;
 import com.dongyang.HarmonyLink.MVC.domain.Article.DTO.ArticlePostDTO;
 import com.dongyang.HarmonyLink.MVC.domain.Article.DTO.PostDTO;
 import com.dongyang.HarmonyLink.MVC.domain.Article.DTO.TrackDTO;
@@ -9,13 +8,13 @@ import com.dongyang.HarmonyLink.MVC.domain.Article.Entity.ArticleEntity;
 import com.dongyang.HarmonyLink.MVC.domain.Article.Entity.TrackEntity;
 import com.dongyang.HarmonyLink.MVC.domain.User.DTO.UserDTO;
 import com.dongyang.HarmonyLink.MVC.domain.User.Entity.UserEntity;
+import com.dongyang.HarmonyLink.Manager.MapperManager.BuildDTOManager;
 import com.dongyang.HarmonyLink.Manager.MapperManager.BuildEntityManager;
-import com.dongyang.HarmonyLink.Manager.SessionManager;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,18 +22,19 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PostService {
 
+    private TrackService trackService; // 타 기능 관련해서 참조시에는 리포지토리 직접 참조 대신, 서비스 통해 참조하기.
     private PostRepository postRepository;
 
-    public PostService(PostRepository postRepository, SessionManager sessionManager) {
+    public PostService(PostRepository postRepository, TrackService trackService) {
         this.postRepository = postRepository;
+        this.trackService = trackService;
     }
 
-    /** 게시글 조회수 증가 및 해당 게시글 정보 가져오기 */
+    /** 게시글 조회수 증가 및 해당 게시글 '정보' 가져오기 */
     public ArticlePostDTO getArticle(Long postKey) {
 
         ArticleEntity entity = postRepository.findById(postKey)
@@ -43,15 +43,30 @@ public class PostService {
         entity.increaseView(); // 조회수 증가
         postRepository.save(entity); // 조회수가 증가된 entity 저장
 
+
         return ArticlePostDTO.toDTO(entity);
     }
 
-    /** 특정 필터링의 게시글 목록 반환 */
+    /** 특정 필터링의 게시글 '목록' 반환 */
     public Page<ArticlePostDTO> getFilteredList(String mbti, Pageable pageable) {
+        List<ArticleEntity> articleList = postRepository.findByInputMbti(mbti, pageable);
+        if(articleList.size() == 0) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "에러 임시지정");
 
-        return postRepository.findByInputMbti(mbti, pageable)
-                .map(i -> ArticlePostDTO.toDTO(i));
-        // Page<>는 stream과 비슷하게 .map() 기능 제공.
+        List<ArticlePostDTO> articlePostList = new ArrayList<>();
+        
+        // Page<>  아니더라도, List<> 또한 Iterable 속성 지니므로 foreach 가능
+        articleList.forEach(
+                articleEntity -> {
+                    PostDTO postDTO = BuildDTOManager.buildPostDTO(ArticlePostDTO.toDTO(articleEntity));
+
+                    String trackKey = articleEntity.getTrack().getSpotifyKey();
+                    TrackDTO trackDTO = trackService.getTrackBySpotifyKey(trackKey);
+
+                    articlePostList.add(BuildDTOManager.buildArticlePostDTO(postDTO,trackDTO));
+                }
+        );
+
+        return new PageImpl<>(articlePostList, pageable, articlePostList.size());
     }
 
     /** '모든' 게시글 반환(필터링 X) */

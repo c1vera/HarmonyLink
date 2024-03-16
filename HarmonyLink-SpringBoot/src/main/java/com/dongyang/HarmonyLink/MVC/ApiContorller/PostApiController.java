@@ -43,6 +43,8 @@ public class PostApiController {
     public ResponseEntity<ArticlePostDTO> getArticle(@PathVariable("postKey") Long postKey) {
         ArticlePostDTO article = postService.getArticle(postKey);
 
+
+
         return ResponseEntity.status(HttpStatus.OK).body(article);
     }
 
@@ -84,6 +86,8 @@ public class PostApiController {
         PostDTO devidePostDTO = BuildDTOManager.buildPostDTO(dto);
         TrackDTO devideTrackDTO = BuildDTOManager.buildTrackDTO(dto);
 
+        log.info("잘오니? : " + dto.getSpotifyKey());
+
         /* 현재 사용자가 게시글에 작성하고자 하는 track이 본 서비스 DB에 존재하는지 확인하고, 없으면 삽입 */
         // postDTO의 field 값 일부를 추출하여 TrackDTO로 만들기
         
@@ -92,7 +96,7 @@ public class PostApiController {
 
 
         /* Article 삽입하기 */
-        // 가져온 track 값 포함하여 저장하기
+        // 삽입된 track의 내용을 기반으로, articleEntity를 저장
         ArticlePostDTO resultDTO = postService.postArticle(user, devidePostDTO, trackDTO);
 
         return ResponseEntity.status(HttpStatus.OK).body(resultDTO);

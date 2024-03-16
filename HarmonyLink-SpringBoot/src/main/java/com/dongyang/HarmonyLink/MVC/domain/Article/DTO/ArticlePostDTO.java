@@ -3,10 +3,7 @@ package com.dongyang.HarmonyLink.MVC.domain.Article.DTO;
 import com.dongyang.HarmonyLink.MVC.domain.Article.Entity.ArticleEntity;
 import com.dongyang.HarmonyLink.MVC.domain.Article.Entity.TrackEntity;
 import com.dongyang.HarmonyLink.MVC.domain.User.Entity.UserEntity;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 /**
  * 용도 :
@@ -16,6 +13,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @ToString
+@Builder
 public class ArticlePostDTO {
     /* 게시글 정보 부분 */
     private Long post_key;
@@ -32,7 +30,7 @@ public class ArticlePostDTO {
 
     /* user의 정보 부분 */
     private Long userKey; // 사용자의 DB Key 저장하여, 1:M 관계 수용(?)
-    private Long spotifyKey; // spotify에서 저장하는 키값을 기준으로 노래를 저장하기
+    private String spotifyKey; // spotify에서 저장하는 키값을 기준으로 노래를 저장하기
     private String nickname; // 사용자 이름
 
     /* 추후 빌더로만 사용하기 */

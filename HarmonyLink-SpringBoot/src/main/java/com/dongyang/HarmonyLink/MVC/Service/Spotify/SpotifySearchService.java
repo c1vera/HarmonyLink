@@ -65,7 +65,7 @@ public class SpotifySearchService {
         ObjectNode objectNode = objectMapper.createObjectNode();
 
         // 검색 결과의 값이 없는 경우, 어떤 값을 return할 것인가?
-        if(jsonNode.isEmpty()) return "검색 결과가 없습니다.";
+        if(jsonNode.isEmpty()) return objectNode.put("message", "검색 내역이 없습니다.").toString();
 
         if(type.equals("track")) {
             ArrayNode arrayNode = objectNode.putArray("tracks"); // arrayNode는 미리 추가해놔도 됨..?
@@ -88,10 +88,11 @@ public class SpotifySearchService {
                     }
 
                     // JsonNode -> ObjectNode
+                    /* 트랙명, 아티스트명 삽입*/
                     jsonTemp.put("trackName", trackName);
                     jsonTemp.put("artistName", artistName);
 
-                    // artist 이미지 가져오기
+                    /* 앨범 커버 이미지 가져오기 */
                     JsonNode trackImageNode = trackInfo.path("album").path("images").get(0);
 
                     if(trackImageNode != null) {
@@ -105,14 +106,19 @@ public class SpotifySearchService {
                         jsonTemp.put("imgUri", imgUri);
                         jsonTemp.put("imgWidth", imgWidth);
                         jsonTemp.put("imgHeight", imgHeight);
-
                     }
+                    
+                    
+                    /* 해당 트랙을 저장해두는 spotify key 가져오기 - primary key 사용 용도 */
+                    jsonTemp.put("spotifyKey", trackInfo.path("uri").asText("nonValue"));
 
                     arrayNode.add(jsonTemp);
                 } else log.info("몬가 잘못됨..");
             }
         }
 
+        // artist 기능 임시 제거. 추후 기능 확장시 재사용 가능성 있음.
+        /*
         if(type.equals("artist")) {
             ArrayNode arrayNode = objectNode.putArray("artist"); // arrayNode는 미리 추가해놔도 됨..?
 
@@ -157,6 +163,8 @@ public class SpotifySearchService {
                 } else log.info("몬가 잘못됨..");
             }
         }
+
+         */
 
 
         
