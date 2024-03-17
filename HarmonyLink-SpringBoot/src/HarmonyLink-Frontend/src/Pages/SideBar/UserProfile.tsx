@@ -66,7 +66,7 @@ const UserProfile = () => {
         <Button size={'small'} theme={'default'} >로그인</Button>
         </Link>
         <Link to="/register">
-        <Button size={'small'} theme={'default'} onClick={handleLogout}>회원가입</Button>
+        <Button size={'small'} theme={'default'} >회원가입</Button>
         </Link>
       </>
     );
