@@ -156,7 +156,7 @@ const WritePage: React.FC = () => {
                     }
                   }}
                 />
-                <Button variant="secondary" onClick={fetchMusicSearch}>
+                <Button size={ 'small' } theme={ 'default' } onClick={fetchMusicSearch}>
                   검색하기
                 </Button>
 
