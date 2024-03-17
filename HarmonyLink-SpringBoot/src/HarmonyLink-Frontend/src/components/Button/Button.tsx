@@ -83,6 +83,7 @@ const themeStyles = css<ButtonProps>`
     return css`
       ${backgroundStyle}
       color: ${currentTheme.color};
+      border: ${currentTheme.borderColor};
     `;
   }}
 `;
