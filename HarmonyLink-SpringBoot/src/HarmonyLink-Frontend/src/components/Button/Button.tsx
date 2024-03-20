@@ -14,7 +14,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   label?: string;
   theme: string;
   size: string;
-  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: () => void;
   children: React.ReactNode;
 }
 
@@ -103,10 +103,11 @@ const Button = ({
   size = "medium",
   theme = "dafault",
   children,
+  onClick,
   ...props
 }: ButtonProps) => {
   return (
-    <ButtonEach size={size} theme={theme} {...props}>
+    <ButtonEach size={size} theme={theme} onClick={onClick} {...props} type="button">
       {children}
     </ButtonEach>
   );
