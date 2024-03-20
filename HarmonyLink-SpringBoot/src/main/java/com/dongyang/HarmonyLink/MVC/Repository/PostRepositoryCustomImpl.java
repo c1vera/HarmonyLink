@@ -3,6 +3,7 @@ package com.dongyang.HarmonyLink.MVC.Repository;
 import com.dongyang.HarmonyLink.MVC.domain.Article.Entity.ArticleEntity;
 import com.dongyang.HarmonyLink.MVC.domain.Article.Entity.TrackEntity;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class PostRepositoryCustomImpl implements PostRepositoryCustom {
+    @PersistenceContext
     private final EntityManager em;
 
 

@@ -88,16 +88,9 @@ public class PostApiController {
 
         log.info("잘오니? : " + dto.getSpotifyKey());
 
-        /* 현재 사용자가 게시글에 작성하고자 하는 track이 본 서비스 DB에 존재하는지 확인하고, 없으면 삽입 */
-        // postDTO의 field 값 일부를 추출하여 TrackDTO로 만들기
-        
-        // 만든 DTO 활용하여 트랙 유무 확인, 없으면 삽입하고 아니면 존재하는 값 가져오기
-        TrackDTO trackDTO = trackService.inputTrack(devideTrackDTO);
-
-
         /* Article 삽입하기 */
         // 삽입된 track의 내용을 기반으로, articleEntity를 저장
-        ArticlePostDTO resultDTO = postService.postArticle(user, devidePostDTO, trackDTO);
+        ArticlePostDTO resultDTO = postService.postArticle(user, devidePostDTO, devideTrackDTO);
 
         return ResponseEntity.status(HttpStatus.OK).body(resultDTO);
     }
@@ -112,9 +105,8 @@ public class PostApiController {
         /* 현재 사용자가 게시글에 작성하고자 하는 track이 본 서비스 DB에 존재하는지 확인하고, 없으면 삽입 */
 
         TrackDTO devideTrackDTO = BuildDTOManager.buildTrackDTO(dto);
-        TrackDTO trackDTO = trackService.inputTrack(devideTrackDTO);
 
-        ArticlePostDTO resultDTO = postService.patchArticle(user, dto, trackDTO);
+        ArticlePostDTO resultDTO = postService.patchArticle(user, dto, devideTrackDTO);
 
         return ResponseEntity.status(HttpStatus.OK).body(resultDTO);
     }

@@ -15,6 +15,7 @@ import lombok.*;
 @ToString
 @Builder
 public class ArticlePostDTO {
+
     /* 게시글 정보 부분 */
     private Long post_key;
     private String title;
@@ -24,7 +25,7 @@ public class ArticlePostDTO {
     private int thumbsUp;
 
     private String trackName;
-    private String artistName;
+    private String artistName; 
     private String imgUri;
 
 
@@ -49,6 +50,14 @@ public class ArticlePostDTO {
                 articleEntity.getTrack().getSpotifyKey(),
                 articleEntity.getUser().getNickname()
         );
+    }
+
+    public ArticlePostDTO setTrackInfo(TrackDTO trackDTO) {
+        this.trackName = trackDTO.getTrackName();
+        this.artistName = trackDTO.getTrackArtist();
+        this.imgUri = trackDTO.getTrackImgUri();
+
+        return this;
     }
 
 }

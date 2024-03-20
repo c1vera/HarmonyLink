@@ -65,7 +65,7 @@ public class SpotifySearchService {
         ObjectNode objectNode = objectMapper.createObjectNode();
 
         // 검색 결과의 값이 없는 경우, 어떤 값을 return할 것인가?
-        if(jsonNode.isEmpty()) return objectNode.put("message", "검색 내역이 없습니다.").toString();
+        // if(jsonNode.isEmpty()) return objectNode.put("message", "검색 내역이 없습니다.").toString();
 
         if(type.equals("track")) {
             ArrayNode arrayNode = objectNode.putArray("tracks"); // arrayNode는 미리 추가해놔도 됨..?
