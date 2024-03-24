@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -42,8 +43,6 @@ public class PostApiController {
     @GetMapping("/user/post/{postKey}")
     public ResponseEntity<ArticlePostDTO> getArticle(@PathVariable("postKey") Long postKey) {
         ArticlePostDTO article = postService.getArticle(postKey);
-
-
 
         return ResponseEntity.status(HttpStatus.OK).body(article);
     }
@@ -81,8 +80,10 @@ public class PostApiController {
     @PostMapping("/user/requestPost")
     public ResponseEntity<ArticlePostDTO> postArticle(HttpServletRequest request,
                                             @RequestBody ArticlePostDTO dto) {
-        UserDTO user = loginService.getAuthUser(request);
+        Optional<UserDTO> user = loginService.getAuthUser(request);
 
+        if(user.isEmpty())
+        return ResponseEntity.status(506).build();
         PostDTO devidePostDTO = BuildDTOManager.buildPostDTO(dto);
         TrackDTO devideTrackDTO = BuildDTOManager.buildTrackDTO(dto);
 
@@ -90,7 +91,7 @@ public class PostApiController {
 
         /* Article 삽입하기 */
         // 삽입된 track의 내용을 기반으로, articleEntity를 저장
-        ArticlePostDTO resultDTO = postService.postArticle(user, devidePostDTO, devideTrackDTO);
+        ArticlePostDTO resultDTO = postService.postArticle(user.get(), devidePostDTO, devideTrackDTO);
 
         return ResponseEntity.status(HttpStatus.OK).body(resultDTO);
     }
@@ -100,13 +101,15 @@ public class PostApiController {
     public ResponseEntity<ArticlePostDTO> patchArticle(HttpServletRequest request,
                                                        @RequestBody ArticlePostDTO dto) {
 
-        UserDTO user = loginService.getAuthUser(request);
+        Optional<UserDTO> user = loginService.getAuthUser(request);
 
         /* 현재 사용자가 게시글에 작성하고자 하는 track이 본 서비스 DB에 존재하는지 확인하고, 없으면 삽입 */
 
         TrackDTO devideTrackDTO = BuildDTOManager.buildTrackDTO(dto);
 
-        ArticlePostDTO resultDTO = postService.patchArticle(user, dto, devideTrackDTO);
+        ArticlePostDTO resultDTO = postService.patchArticle(user.get(), dto, devideTrackDTO);
+
+
 
         return ResponseEntity.status(HttpStatus.OK).body(resultDTO);
     }
@@ -116,11 +119,11 @@ public class PostApiController {
     public ResponseEntity<ArticlePostDTO> deleteArticle(HttpServletRequest request,
                                                         @RequestBody ArticlePostDTO dto) {
 
-        UserDTO user = loginService.getAuthUser(request);
+        Optional<UserDTO> user = loginService.getAuthUser(request);
 
         PostDTO devidePostDTO = BuildDTOManager.buildPostDTO(dto);
 
-        ArticlePostDTO resultDTO = postService.deleteArticle(user, devidePostDTO);
+        ArticlePostDTO resultDTO = postService.deleteArticle(user.get(), devidePostDTO);
         // track은 DB에 그대로 저장되어있어도 상관없음!!!
 
         return ResponseEntity.status(HttpStatus.OK).body(resultDTO);

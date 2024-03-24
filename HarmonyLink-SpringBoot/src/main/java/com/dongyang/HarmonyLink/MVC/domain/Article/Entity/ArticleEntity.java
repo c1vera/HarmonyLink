@@ -49,7 +49,7 @@ public class ArticleEntity extends BaseTimeEntity {
     @JoinColumn(name="user_key")
     private UserEntity user;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name="spotify_key")
     private TrackEntity track;
 

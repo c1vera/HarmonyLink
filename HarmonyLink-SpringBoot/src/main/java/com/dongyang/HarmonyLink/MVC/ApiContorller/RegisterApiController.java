@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/v1") // controller 또한 매핑 가능. 이를 통해 컨트롤러 별 버전 유지도 가능.
 @Slf4j
@@ -61,7 +63,7 @@ public class RegisterApiController {
 
     @PatchMapping("/user/Register")
     public ResponseEntity<UserDTO> patchUser(HttpServletRequest request, @RequestBody UserDTO dto) {
-        UserDTO user = loginService.getAuthUser(request);
+        Optional<UserDTO> user = loginService.getAuthUser(request);
 
         // 현재 권한을 지니고 작업을 수행하는 사용자가 작업대상을 작성했던 인원이 맞는지 확인하는 함수가 필요하다.
 

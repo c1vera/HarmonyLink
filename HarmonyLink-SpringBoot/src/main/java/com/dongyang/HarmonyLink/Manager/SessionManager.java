@@ -17,8 +17,9 @@ import java.util.UUID;
 @Configuration
 @Slf4j
 public class SessionManager {
+    private static final String COOKIE_NONE = "noneCookie";
 
-    /** 쿠키와 세션 생성 */
+    /** 쿠키와 세션 생성.  */
     public Cookie sessionLogin(HttpSession session, UserDTO user) {
 
         String uuid = UUID.randomUUID().toString();
@@ -28,6 +29,10 @@ public class SessionManager {
 
         // 사용자가 쿠키로 저장할 UUID 쿠키 만들어 return
         Cookie cookie = new Cookie("session_id", uuid); // 쿠키 이름 자체는 딱히 상관없다..한다.
+
+        // 쿠키는 시간 정보를 설정하지 않으면 영속쿠키가 아닌 세션쿠키로 설정된다.
+        // 세션 쿠키는 브라우저가 종료되는 즉시 삭제되나, 영속쿠키는 특정 시간까지 남아있음.
+        cookie.setMaxAge(60 * 60); // 1시간동안 유지
         cookie.setPath("/");
 
         return cookie;
@@ -40,9 +45,6 @@ public class SessionManager {
     }
 
 
-    /**
-     * 서버 세션 만료 시(서버 재시작 시) 또는
-     * */
 
 
     /**
@@ -53,8 +55,9 @@ public class SessionManager {
         HttpSession session = request.getSession();
         String cookieValue = getCookieValueForSession(request.getCookies());
 
-        if(cookieValue.equals("")) {
-            log.info("문제발생.");
+
+        if(cookieValue.equals(COOKIE_NONE)) {
+            log.info("쿠키 값이 없음.");
             return Optional.empty(); // orElseThrow는 'Optional.empty()'를 받는 경우 에러 처리함.
         }
 
@@ -64,12 +67,11 @@ public class SessionManager {
 
     /** session_id 쿠키 찾아서 uuid value값 찾기. */
     public String getCookieValueForSession(Cookie[] cookies) {
-        String cookieValue = "";
+        String cookieValue = COOKIE_NONE;
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if ("session_id".equals(cookie.getName())) {
-                    cookieValue = cookie.getValue();
-                    // 쿠키 값으로 로그인 세션 확인
+                    cookieValue = cookie.getValue(); // 쿠키 값으로 로그인 세션 확인
                 }
             }
         }
@@ -79,12 +81,12 @@ public class SessionManager {
 
     /** 찾은 session_id UUID로 세션에 저장된 UserDTO 값 가져오기 */
     public Optional<UserDTO> sessionCheck(HttpSession session, String sessionName) {
-        UserDTO sessionUser = null; // 기본 null 설정
-        
         if (!session.isNew()) { // 기존에 이미 세션이 존재했던 경우(이미 로그인을 통해 세션 생성된 경우)
-            sessionUser = (UserDTO) session.getAttribute(sessionName); // 세션에 저장된 사용자 DTO 데이터 가져옴
+            UserDTO sessionUser = (UserDTO) session.getAttribute(sessionName); // 세션에 저장된 사용자 DTO 데이터 가져옴
+
+            return Optional.ofNullable(sessionUser);
         }
 
-        return Optional.ofNullable(sessionUser); // null 또는 사용자 DTO를 반환
+        return Optional.empty(); // null 또는 사용자 DTO를 반환
     }
 }

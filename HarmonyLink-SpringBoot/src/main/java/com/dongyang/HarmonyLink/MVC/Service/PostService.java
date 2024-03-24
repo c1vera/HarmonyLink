@@ -51,6 +51,7 @@ public class PostService {
         postRepository.save(entity); // 조회수가 증가된 entity 저장
 
         TrackDTO trackDTO = BuildDTOManager.toTrackDTO(entity.getTrack());
+        log.info(trackDTO.getTrackName() + "을 보여줄겁니다");
 
 
         return ArticlePostDTO.toDTO(entity).setTrackInfo(trackDTO);
@@ -121,7 +122,7 @@ public class PostService {
         Optional<TrackEntity> trackDTO = trackService.inputTrack(devideTrackDTO);
 
         if(target.getUser().getUserKey() != loginUser.getUserKey())
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "수정자는 게시글을 작성한 인원이 아님");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정자는 게시글을 작성한 인원이 아님");
 
         // 값 수정 -> track DTO 및 Entity 관련 기능 작성 완료 이후 추후 수정
         // target.patchEntity(ArticleEntity.toEntity(dto, loginUser, savedTrack)),savedTrack);
@@ -137,7 +138,7 @@ public class PostService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "해당 게시글 존재하지 않음"));
 
         if(target.getUser().getUserKey() != user.getUserKey())
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "삭제 희망자는 게시글을 작성한 인원이 아님.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제 희망자는 게시글을 작성한 인원이 아님.");
 
         postRepository.delete(target);
 

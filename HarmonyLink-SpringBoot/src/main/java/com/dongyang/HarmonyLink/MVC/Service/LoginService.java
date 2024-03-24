@@ -60,11 +60,13 @@ public class LoginService {
 
     /** 현재 사용자의 '권한' 확인 + 로그인 한 사용자의 정보를 DTO로 반환 */
     @Transactional
-    public UserDTO getAuthUser(HttpServletRequest request) {
-        UserDTO userInfo = sessionManager.getAuthUser(request)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "사용자 인증 실패"));
+    public Optional<UserDTO> getAuthUser(HttpServletRequest request) {
 
-        return userInfo;
+        UserDTO userInfo = sessionManager.getAuthUser(request)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "로그인이 필요한 사용자입니다."));
+
+
+        return Optional.of(userInfo);
     }
 
 
