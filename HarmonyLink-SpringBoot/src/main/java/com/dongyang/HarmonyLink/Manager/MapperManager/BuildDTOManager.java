@@ -64,7 +64,7 @@ public class BuildDTOManager {
                 .thumbsUp(postDTO.getThumbsUp())
                 .trackName(trackDTO.getTrackName())
                 .artistName(trackDTO.getTrackArtist())
-                .imgUri(trackDTO.getTrackArtist())
+                .imgUri(trackDTO.getTrackImgUri())
                 .userKey(postDTO.getUserKey())
                 .spotifyKey(trackDTO.getSpotifyKey())
                 .nickname(postDTO.getNickname())
