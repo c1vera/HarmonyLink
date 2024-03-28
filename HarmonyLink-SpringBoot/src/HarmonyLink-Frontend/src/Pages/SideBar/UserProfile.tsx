@@ -31,27 +31,6 @@ const UserProfile = () => {
       .catch((error) => {
         // 에러 처리
         console.error("Logout failed:", error);
-        if (error.response && error.response.status === 401) {
-          // 401 에러 처리 로직
-          console.error('Session expired. User needs to login again.');
-      
-          // 로그아웃 상태로 전환
-          dispatch(logoutUser());
-      
-          // 세션 스토리지에서 사용자 정보 제거
-          sessionStorage.removeItem('user');
-      
-          // 쿠키 삭제
-          document.cookie = 'session_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-      
-          // persistor 상태 제거
-          persistor.purge().then(() => {
-            console.log('Session expired. Persisted state has been removed.');
-          });
-      
-          // 사용자를 로그인 페이지로 리디렉트
-          navigate("/login");
-        }
       
         // 오류를 다음으로 전달
         return Promise.reject(error);

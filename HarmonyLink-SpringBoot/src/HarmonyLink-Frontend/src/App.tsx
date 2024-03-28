@@ -11,7 +11,39 @@ import PrivateRoute from "./PrivateRoute";
 import Test from "./Pages/Spotify/Test"
 import PostDetailPage from "./Pages/PostDetail/PostDetailPage";
 import Search from "./Pages/Spotify/Search";
-const App: React.FC = () => {
+import axios from "axios";
+import {  useDispatch } from "react-redux";
+import {  AppDispatch, persistor } from "./redux/store";
+import { logoutUser } from "./redux/actions/userActions";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+const App = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const interceptor = axios.interceptors.response.use(
+      response => response,
+      error => {
+        console.error("Logout failed:", error);
+        if (error.response && error.response.status === 401) {
+          console.error('Session expired. User needs to login again.');
+          dispatch(logoutUser());
+          sessionStorage.removeItem('user');
+          document.cookie = 'session_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+          persistor.purge().then(() => {
+            console.log('Session expired. Persisted state has been removed.');
+          });
+          navigate("/login");
+        }
+        return Promise.reject(error);
+      }
+    );
+    return () => {
+      axios.interceptors.response.eject(interceptor);
+    };
+  }, [dispatch, navigate]);
+  
   return (
     <div className="App">
       <SideBar />
