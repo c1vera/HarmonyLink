@@ -17,8 +17,8 @@ const InputEach = styled.input<InputProps>`
   border: 2px solid #bebebe;
 `;
 
-const Input = ({ width, fontSize, ...props }: InputProps) => {
-  return <InputEach width={width} fontSize={fontSize} {...props} />;
+const Input = ({ width, fontSize, onChange, onKeyPress, ...props }: InputProps) => {
+  return <InputEach width={width} fontSize={fontSize} onChange={onChange} onKeyPress={onKeyPress} {...props} />;
 };
 
 export default Input;
