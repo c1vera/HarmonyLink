@@ -11,6 +11,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+import java.util.Optional;
+
 
 @RequestMapping("/api/v1")
 @RestController
@@ -67,6 +70,25 @@ public class LoginApiController {
                 .build();
     }
 
+
+    public void SessionController(LoginService loginService) {
+        this.loginService = loginService;
+    }
+    @GetMapping("/session/validate")
+    public ResponseEntity<?> validateSession(HttpServletRequest request) {
+        try {
+            Optional<UserDTO> user = loginService.getAuthUser(request);
+            if (!user.isPresent()) {
+                // 사용자 정보가 없는 경우, 즉 세션이 유효하지 않은 경우
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "세션 유효하지 않음");
+            }
+            return ResponseEntity.ok().body(user.get());
+        } catch (ResponseStatusException e) {
+            // 세션 만료 또는 유효하지 않은 경우
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("세션 유효하지 않음");
+        }
+    }
+    
 
 
 //    /** userId는 주어진 사용자 정보 json에서 추출해서 사용*/
