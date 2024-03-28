@@ -12,3 +12,14 @@ export const Body = styled.div`
   background-color: white;
   box-shadow: 0px 2px 10px 0px rgba(154, 154, 154, 0.559);
 `;
+
+export const ScrollBody = styled.div`
+  height: calc(100% - 70px);
+  
+  overflow-y: scroll;
+  margin: 40px;
+  padding: 40px;
+  border-radius: 20px;
+  background-color: white;
+  box-shadow: 0px 2px 10px 0px rgba(154, 154, 154, 0.559);
+`;
